@@ -9,6 +9,7 @@ import ServiceCategories from '../../Components/ServiceCategories/ServiceCategor
 import Feature from '../../Components/Feature/Feature'
 import Freelancer from '../../Components/Freelancer/Freelancer'
 import ClientReviews from '../../Components/ClientReviews/ClientReviews'
+import { Link } from 'react-router-dom'
  
 
 export default function Home() {
@@ -30,7 +31,7 @@ export default function Home() {
       </p>
       {/* Contact buttons */}
       <div className='flex items-center gap-3' >
-        <button className='btn w-fit bg-Purple-800 text-white'>post jop </button>
+        <Link to={`/post-jop`} className='btn w-fit bg-Purple-800 text-white'>post jop </Link>
         <button className='btn w-fit bg-amber-500 text-white'>Get A jop</button>
 
       </div>

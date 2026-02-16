@@ -11,6 +11,11 @@ import Home from './Pages/Home/Home';
 import NotFound from './Pages/NotFound/NotFound';
 import SendConfirmEmail from './Pages/SendConfirmEmail/SendConfirmEmail';
 import ConfirmEmail from './Pages/ConfirmEmail/ConfirmEmail';
+import PostJop from './Pages/PostJop/PostJop';
+import AuthProvider from './Components/Context/AuthContext';
+import Profile from './Pages/Profile/Profile';
+import ProtectedRout from './Components/ProtectedRout/ProtectedRout';
+ 
  
  
  
@@ -53,7 +58,18 @@ function App() {
   path: "confirm-email",
   element: <ConfirmEmail/>
 }, 
-
+              {
+  path: "post-jop",
+  element: <ProtectedRout>
+    <PostJop/>
+  </ProtectedRout>
+},
+ {
+  path: "profile",
+  element: <ProtectedRout>
+    <Profile/>
+  </ProtectedRout>
+},
               
               
                
@@ -75,8 +91,14 @@ function App() {
             {/* <VerifyCode/> */}
             {/* <SetNewPassword/> */}
 
-            <RouterProvider router={router}/>
+            {/* <AuthProvider>
+               <RouterProvider router={router}/>
              <ToastContainer position='top-right' autoClose={3000}  closeButton={false}  closeOnClick={true} />
+            </AuthProvider> */}
+            <AuthProvider>
+               <RouterProvider router={router}/>
+             <ToastContainer position='top-right' autoClose={3000}  closeButton={false}  closeOnClick={true} />
+            </AuthProvider>
         
         </>
     );

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import logoPhoto from '../../assets/Images/Logo.png'
 import SocialButtons from '../../Components/SocialButtons/SocialButtons'
 import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons'
@@ -11,8 +11,14 @@ import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { API_CONFIG} from '../../Config'
 import { sendDataToLogin } from '../../Services/auth-services'
+import { useContext } from 'react'
+import { AuthContext } from '../../Components/Context/AuthContext'
 
 export default function Login() {
+    const location=useLocation()
+    const from =location.state.from || "/"
+
+    const {setToken}=useContext(AuthContext)
 
      const navigate=useNavigate();
      const [isExistError,setIsExistError]=useState(null)
@@ -33,10 +39,14 @@ export default function Login() {
              
              
             const response= await sendDataToLogin(values)
+            console.log(response)
             if(response.isSuccess){
                 toast("ًWelcome Back")
+                localStorage.setItem("token",response.data.jwtToken.token)
+                setToken(response.data.jwtToken.token)
+
                 setTimeout(()=>{
-                    navigate('/')
+                    navigate(from)
                 },3000)
                 
                 
@@ -113,7 +123,7 @@ export default function Login() {
                              {/* terms and conditions */}
                              <div className='flex justify-between items-center -mt-3'>
                                  <div className='flex  gap-1 '>
-                                    <input type='checkbox'/>
+                                    <input type='checkbox' name='rememberMe' value={formik.values.rememberMe} onChange={handleChange} onBlur={formik.handleBlur}/>
                                 <span>Remember me</span>
                                  </div>
                                 <Link to="/forget-password" className='text-red-500'>ForgetPassword?</Link>
