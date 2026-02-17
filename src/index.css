@@ -1,18 +1,36 @@
 @import "tailwindcss";
-@theme{ 
-    --color-Purple-50:#F3E8FF;
-    --color-Purple-100:#E9D5FF;
-    --color-Purple-200:#D8B4FE;
-    --color-Purple-300:#C084FC;
-    --color-Purple-400: #A855F7;
-    --color-Purple-500: #4B0082; 
-    --color-Purple-600:#6D28D9;
-    --color-Purple-700:#5B21B6;
-    --color-Purple-800:#4C1D95;
-    --color-Purple-900:#2E1065;
-    --color-Purple-950:#1A072F;
-    
-} 
+@theme {
+  --color-Purple-50: #F3E8FF;
+  --color-Purple-100: #E9D5FF;
+  --color-Purple-200: #D8B4FE;
+  --color-Purple-300: #C084FC;
+  --color-Purple-400: #A855F7;
+  --color-Purple-500: #4B0082;
+  --color-Purple-600: #6D28D9;
+  --color-Purple-700: #5B21B6;
+  --color-Purple-800: #4C1D95;
+  --color-Purple-900: #2E1065;
+  --color-Purple-950: #1A072F;
+  --animate-side-in:slide-in 300ms ease-out;
+  --animate-side-out:slide-out 300ms ease-out;
+  @keyframes slide-in {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes slide-out {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+}
+
 /* 50   #F3E8FF
 100  #E9D5FF
 200  #D8B4FE
