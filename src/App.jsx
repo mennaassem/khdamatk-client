@@ -15,12 +15,21 @@ import PostJop from './Pages/PostJop/PostJop';
 import AuthProvider from './Components/Context/AuthContext';
 import Profile from './Pages/Profile/Profile';
 import ProtectedRout from './Components/ProtectedRout/ProtectedRout';
+import Job from './Pages/Job/Job';
+import ThemeProvider from './Components/Context/Theme.Context';
+
+ 
+import ThemeWrapper from './Components/Context/ThemeWrapper';
+ 
+ 
+ 
  
  
  
  
 
 function App() {
+ 
     const router=createBrowserRouter([
         {
             path:'/',
@@ -70,6 +79,10 @@ function App() {
     <Profile/>
   </ProtectedRout>
 },
+   {
+  path: "job",
+  element: <Job/>
+},
               
               
                
@@ -84,7 +97,7 @@ function App() {
         }
     ])
     return (
-        <>
+        <div>
             {/* <Signup/> */}
             {/* <Login/> */}
             {/* <ForgetPassword/> */}
@@ -95,12 +108,29 @@ function App() {
                <RouterProvider router={router}/>
              <ToastContainer position='top-right' autoClose={3000}  closeButton={false}  closeOnClick={true} />
             </AuthProvider> */}
-            <AuthProvider>
-               <RouterProvider router={router}/>
+            {/* <AuthProvider>
+               <ThemeProvider>
+                  <RouterProvider router={router}/>
              <ToastContainer position='top-right' autoClose={3000}  closeButton={false}  closeOnClick={true} />
-            </AuthProvider>
-        
-        </>
+               </ThemeProvider>
+            </AuthProvider> */}
+            {/* <AuthProvider>
+  <ThemeProvider>
+    <ThemeWrapper>
+       <RouterProvider router={router}/>
+    <ToastContainer position='top-right' autoClose={3000} closeButton={false} closeOnClick/>
+    </ThemeWrapper>
+  </ThemeProvider>
+</AuthProvider> */}
+        <AuthProvider>
+  <ThemeProvider>
+       <ThemeWrapper>
+       <RouterProvider router={router}/>
+       <ToastContainer position='top-right' autoClose={3000} closeButton={false} closeOnClick/>
+    </ThemeWrapper>
+  </ThemeProvider>
+</AuthProvider>
+        </div>
     );
 }
 

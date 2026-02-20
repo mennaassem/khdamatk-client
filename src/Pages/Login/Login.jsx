@@ -16,7 +16,7 @@ import { AuthContext } from '../../Components/Context/AuthContext'
 
 export default function Login() {
     const location=useLocation()
-    const from =location.state.from || "/"
+   const from = location.state?.from?.pathname || "/"; 
 
     const {setToken}=useContext(AuthContext)
 
@@ -86,7 +86,7 @@ export default function Login() {
     }
   return (
 <>
-<div>
+<div className='pt-20 lg:pt-0'>
     <div className="container items-center justify-between gap-16 grid lg:grid-cols-2">
         {/* Left side: Login form and text content */}
         <div className=' p-8 bg-white shadow-lg'>

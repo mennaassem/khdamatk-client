@@ -99,7 +99,7 @@ export default function Signup() {
     }
   return (
 <>
-<div>
+<div className='pt-20 lg:pt-0'>
     <div className="container items-center justify-between gap-16 grid lg:grid-cols-2">
         {/* Left side: Sign up form and text content */}
         <div className=' p-8 bg-white shadow-lg'>

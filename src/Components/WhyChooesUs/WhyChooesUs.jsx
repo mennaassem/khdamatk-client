@@ -4,7 +4,7 @@ import React from 'react'
 
 export default function () {
   return (
-    <div className='bg-gray-50'>
+    <div className=''>
     <section className=" py-16">
   <div className="container mx-auto px-4">
 

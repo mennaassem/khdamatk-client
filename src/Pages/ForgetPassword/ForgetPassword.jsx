@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 export default function ForgetPassword() {
   return (
     <>
-    <div>
+    <div className='pt-20 lg:pt-0'>
     <div className="container items-center justify-between gap-16 grid lg:grid-cols-2">
           {/* ===== Left side: Forgot Password Form ===== */}
         <div className=' p-10 bg-white shadow-lg'>

@@ -26,7 +26,8 @@ export default function ClientReviews() {
           return <Loading/>
         }
   return (
-     <div className="container space-y-4 p-10">
+    <div className='dark:bg-gray-900 dark:text-white bg-gray-50'>
+          <div className="container space-y-4 p-10">
         <h2 className='font-bold text-3xl text-center'>Hear from Our Clients</h2>
          {/* details-card */}
     <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'>
@@ -40,5 +41,7 @@ export default function ClientReviews() {
 
     </div>
      </div>
+    </div>
+    
   )
 }

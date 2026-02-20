@@ -1,7 +1,7 @@
  
 export default function PostJop() {
   return (
-    <div className="bg-gray-50 pb-3 min-h-screen pt-15">
+    <div className="bg-gray-50 pb-3 min-h-screen ">
 
       {/* Black Banner */}
       <div className="bg-black text-white text-center p-10 text-3xl font-medium">

@@ -26,7 +26,8 @@ export default function Freelancer() {
       return <Loading/>
     }
   return (
-    <div className="container space-y-4  p-10">
+    <div className='dark:bg-gray-950 dark:text-white'>
+       <div className="container space-y-4  p-10 ">
          <h2 className='font-bold text-3xl text-center'>Our Top-Rated Freelancers</h2>
           <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'>
             {freelancer.map((items)=>(
@@ -35,5 +36,7 @@ export default function Freelancer() {
  
   </div>
     </div>
+    </div>
+    
   )
 }

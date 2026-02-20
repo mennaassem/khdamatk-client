@@ -31,28 +31,72 @@ export default function ServiceCategories() {
 
     }
   return (
-    <div className="container">
-           <section className="service-categories p-10 space-y-6">
-      <h2  className='font-bold text-3xl text-center'>Find Quality Freelancers & Remote Employees</h2>
- <div className='flex items-center gap-2'>
+//     <div className="container">
+//            <section className="service-categories p-10 space-y-6">
+//       <h2  className='font-bold text-3xl text-center'>Find Quality Freelancers & Remote Employees</h2>
+//  <div className='flex items-center gap-2'>
     
-     {
-        serviceCategories.lenght > 0 ? ( serviceCategories.map((category, index)=>(
-             <ServiceCategoriesCard key={index}
-              category={category}/>
-        ))) :(
-       <p className="mt-4 text-center text-xl mx-auto">
-  Categories will appear here once available
-</p>
+//      {
+//         serviceCategories.length  > 0 ? ( serviceCategories.map((category, index)=>(
+//              <ServiceCategoriesCard key={index}
+//               category={category}/>
+//         ))) :(
+//        <p className="mt-4 text-center text-xl mx-auto">
+//   Categories will appear here once available
+// </p>
  
 
 
 
  
+//         )
+//      }
+//  </div>
+//     </section>
+//     </div>
+<section className='dark:bg-gray-950 '>
+
+  <div className="
+  container
+  service-categories 
+  p-10 space-y-6
+   dark:bg-gray-950
+  transition-colors duration-300
+  ">
+
+    <h2 className="
+    font-bold text-3xl text-center
+    text-gray-900 dark:text-gray-100
+    ">
+      Find Quality Freelancers & Remote Employees
+    </h2>
+
+    <div className="
+    flex flex-wrap justify-center gap-6
+    ">
+
+      {
+        serviceCategories.length > 0 ? (
+          serviceCategories.map((category, index) => (
+            <ServiceCategoriesCard 
+              key={index}
+              category={category}
+            />
+          ))
+        ) : (
+          <p className="
+          mt-4 text-center text-xl mx-auto
+          text-gray-600 dark:text-gray-400
+          ">
+            Categories will appear here once available
+          </p>
         )
-     }
- </div>
-    </section>
+      }
+
     </div>
+
+  </div>
+
+</section>
   )
 }
