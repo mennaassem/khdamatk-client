@@ -67,3 +67,22 @@ export async function confirmEmail(token) {
     throw error;
   }
 }
+
+export async function sendDataToForgetEmail(values){
+  try {
+     const option = {
+       method: "POST",
+       url: "/Auth/forget-password",
+       params: { email: values.email },
+     }
+
+     const { data } = await apiClient.request(option)
+     console.log(data)
+     return data
+
+   } catch (error) {
+     throw error
+   }
+}
+
+

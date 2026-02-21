@@ -18,7 +18,7 @@ transition-all duration-300 ">
                       <img src={photo} className='size-14 object-cover rounded-full mx-auto mb-3'/>
                     <h2 className='text-lg font-semibold text-black dark:text-white'>{clientName}</h2>
                     <h3 className='text-sm text-gray-500 dark:text-white'>{jobtitle}</h3>
-                    <p className='text-sm text-black leading-relaxed mt-5 dark:text-whitecd khdamatk.client'>{reviewText}</p>
+                    <p className='text-sm text-black leading-relaxed mt-5 dark:text-white'>{reviewText}</p>
                 </div>
             </div>
         </div>

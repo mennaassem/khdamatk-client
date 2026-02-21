@@ -3,8 +3,52 @@ import logoPhoto from '../../assets/Images/Logo.png'
 import SocialButtons from '../../Components/SocialButtons/SocialButtons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link } from 'react-router-dom'
+import { useFormik } from 'formik'
+import * as yup from 'yup'
+import { useState } from 'react'
+import { toast } from 'react-toastify'
+import { sendDataToForgetEmail } from '../../Services/auth-services'
 
 export default function ForgetPassword() {
+     const [isExistError,setIsExistError]=useState(null)
+     const [isExistErrorEmail, setIsExistErrorEmail]=useState(null)
+     const  validationSchema= yup.object({
+     
+           email: yup.string().email("Invalid email address").required("Email is required"),
+            
+        })
+async function handelForgetPassword(values) {
+  try {
+    const response = await sendDataToForgetEmail(values);
+    console.log(response);
+
+    if (response.isSuccess) {
+toast.success("Password reset link sent successfully!");
+    }  
+  } 
+ 
+catch (error) {
+  console.log(error);
+
+  const errorMessage = error.response?.data?.errors?.[0]?.message;
+  setIsExistErrorEmail(errorMessage);
+}
+}
+const formik=useFormik({
+    initialValues:{
+         email: '',
+    },
+    validationSchema,
+    onSubmit:handelForgetPassword
+})
+  function handleChange(e){
+        setIsExistError("")
+        setIsExistErrorEmail("")
+        formik.handleChange(e)
+    }
+
+
+
   return (
     <>
     <div className='pt-20 lg:pt-0'>
@@ -25,19 +69,22 @@ export default function ForgetPassword() {
              </div>
                   {/* --- Forgot Password Form --- */}
              <div>
-                <form className='mt-5 space-y-6'>
+                <form className='mt-5 space-y-6'onSubmit={formik.handleSubmit}>
                          {/* Email field&& Phone */}
                          <div className=' flex gap-2'>
                              <div className='relative w-full'>
                             <span className='absolute left-4 -top-3 bg-white px-2 text-sm text-gray-500'>Email</span>
-                            <input type='email' className='form-control'/>
+                            <input type='email' className='form-control' name='email' value={formik.values.email} onChange={handleChange} onBlur={formik.handleBlur}/>
+                             {formik.touched.email && formik.errors.email &&(<p className='text-red-500 text-sm mt-1'>{formik.errors.email}</p>)}
+                            {isExistErrorEmail && (<p className='text-red-500'>{isExistErrorEmail}</p>)}
+
                         
                            </div>
                             
                          </div>
                          {/* Submit button */}
                                 <div>
-                                    <button className='btn text-white'>Submit</button>
+                                    <button type="submit" className='btn text-white'>Submit</button>
                                 </div>
                 </form>
                 
