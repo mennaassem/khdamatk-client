@@ -84,5 +84,24 @@ export async function sendDataToForgetEmail(values){
      throw error
    }
 }
+ 
+export async function sendDataToVerifyCode(values) {
+  try {
+    const option = {
+      method: "POST",
+      url: "/Auth/verify-code",
+      data: values,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
 
+    const { data } = await apiClient.request(option);
+    return data;
 
+  } catch (error) {
+    // ما نستخدمش setIsExistError هنا
+    // نخلي الكومبوننت هو اللي يتعامل مع الخطأ
+    throw error;
+  }
+}

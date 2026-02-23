@@ -6,67 +6,137 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 export default function SetNewPassword() {
   return (
    <>
-          <div className='pt-20 lg:pt-0'>
-    <div className="container items-center justify-between gap-16 grid lg:grid-cols-2">
-      
-    {/* ===== Left side: Set New Password Section ===== */}
-        <div className=' p-10 bg-white shadow-lg'>
-            {/* Back button to return to Login page */}
-            <div className='mb-4 '>
-                <button className='flex items-center gap-2'>
-                    <FontAwesomeIcon icon={faArrowLeft} />
-                    <span>Back to login</span>
-                </button>
-            </div>
-                {/* --- Page Title & Instructions --- */}
-             <div className="Title space-y-2">
-                <h1 className=' font-bold text-2xl'>Set a password</h1>
-            <p className='text-gray-400/70'>Your previous password has been reseted. Please set a new password for your account.</p>
-             </div>
-               {/* --- New Password Form --- */}
-             <div>
-                <form className='mt-5 space-y-6'>
-                         {/* New password input field */}
-                          <div className='relative'>
-                 <span className='absolute left-4 -top-3 bg-white px-2 text-sm  text-gray-500'>Create Password</span>
-                <input type='password' className='form-control'/>
-                 <span className='absolute right-4 top-1/2 transform -translate-y-1/2'>
-                 <FontAwesomeIcon icon={faEyeSlash} />
-                 </span>
-                                                 
-                         </div>
-                         {/* Confirm new password input field */}
-                          <div className='relative'>
-                 <span className='absolute left-4 -top-3 bg-white px-2 text-sm  text-gray-500'>Re-enter Password </span>
-                <input type='password' className='form-control'/>
-                 <span className='absolute right-4 top-1/2 transform -translate-y-1/2'>
-                 <FontAwesomeIcon icon={faEyeSlash} />
-                 </span>
-                                                 
-                         </div>
-                             {/* Submit new password button */}
-                                <div>
-                                    <button className='btn text-white'>Set password</button>
-                                </div>
-                </form>
-                
-                     {/* --- Divider with "Or login with" --- */}
-                <div className='text-center relative m-9'>
-                    <div className='w-full h-0.5 border border-gray-300'></div>
-                    <p className='text-gray-400 text-sm absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white px-2'>Or login with</p>
-                </div>
-                {/* Social media login buttons */}
-                <div>
-                    <SocialButtons/>
-                </div>
-             </div>
-        
+<div className="pt-20 lg:pt-0 bg-white dark:bg-gray-950 min-h-screen transition-colors duration-300">
+  <div className="container items-center justify-between gap-16 grid lg:grid-cols-2">
+
+    {/* ===== Left side ===== */}
+    <div className="p-10 bg-white dark:bg-gray-900 shadow-lg rounded-xl 
+    border border-gray-200 dark:border-gray-800 transition-colors duration-300">
+
+      {/* Back button */}
+      <div className="mb-4">
+        <button className="flex items-center gap-2 
+        text-gray-700 dark:text-gray-300 
+        hover:text-purple-600 dark:hover:text-purple-400 transition">
+          <FontAwesomeIcon icon={faArrowLeft} />
+          <span>Back to login</span>
+        </button>
+      </div>
+
+      {/* Title */}
+      <div className="space-y-2">
+        <h1 className="font-bold text-2xl text-gray-900 dark:text-white">
+          Set a password
+        </h1>
+
+        <p className="text-gray-500 dark:text-gray-400 text-sm">
+          Your previous password has been reset. Please set a new password for your account.
+        </p>
+      </div>
+
+      {/* Form */}
+      <div>
+        <form className="mt-5 space-y-6">
+
+          {/* Create Password */}
+          <div className="relative">
+            <span className="absolute left-4 -top-3 
+            bg-white dark:bg-gray-900 
+            px-2 text-sm 
+            text-gray-500 dark:text-gray-400">
+              Create Password
+            </span>
+
+            <input
+              type="password"
+              className="
+              w-full px-4 py-3 rounded-lg
+              bg-white dark:bg-gray-950
+              border border-gray-300 dark:border-gray-700
+              text-gray-900 dark:text-white
+              focus:outline-none
+              focus:ring-2 focus:ring-purple-500
+              transition
+              "
+            />
+
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 
+            text-gray-500 dark:text-gray-400 
+            hover:text-purple-600 dark:hover:text-purple-400 cursor-pointer transition">
+              <FontAwesomeIcon icon={faEyeSlash} />
+            </span>
+          </div>
+
+          {/* Re-enter Password */}
+          <div className="relative">
+            <span className="absolute left-4 -top-3 
+            bg-white dark:bg-gray-900 
+            px-2 text-sm 
+            text-gray-500 dark:text-gray-400">
+              Re-enter Password
+            </span>
+
+            <input
+              type="password"
+              className="
+              w-full px-4 py-3 rounded-lg
+              bg-white dark:bg-gray-950
+              border border-gray-300 dark:border-gray-700
+              text-gray-900 dark:text-white
+              focus:outline-none
+              focus:ring-2 focus:ring-purple-500
+              transition
+              "
+            />
+
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 
+            text-gray-500 dark:text-gray-400 
+            hover:text-purple-600 dark:hover:text-purple-400 cursor-pointer transition">
+              <FontAwesomeIcon icon={faEyeSlash} />
+            </span>
+          </div>
+
+          {/* Submit */}
+          <div>
+            <button
+              className="w-full py-3 rounded-lg
+              bg-purple-600 hover:bg-purple-700
+              text-white transition">
+              Set password
+            </button>
+          </div>
+
+        </form>
+
+        {/* Divider */}
+        <div className="text-center relative m-9">
+          <div className="w-full border-t border-gray-300 dark:border-gray-700"></div>
+
+          <p className="text-gray-500 dark:text-gray-400 text-sm absolute 
+          top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
+          bg-white dark:bg-gray-900 px-2">
+            Or login with
+          </p>
         </div>
-             {/* ===== Right side: Illustration Image ===== */}
+
+        {/* Social */}
         <div>
-            <img src={logoPhoto} alt="Sign in" />
+          <SocialButtons />
         </div>
+
+      </div>
     </div>
+
+    {/* ===== Right side ===== */}
+    <div>
+      <img
+        src={logoPhoto}
+        alt="Sign in"
+        className="dark:opacity-90"
+      />
+    </div>
+
+  </div>
 </div>
    
    
