@@ -20,6 +20,12 @@ import ThemeProvider from './Components/Context/Theme.Context';
 
  
 import ThemeWrapper from './Components/Context/ThemeWrapper';
+import JobDetails from './Pages/JobDetails/JobDetails';
+import AddService from './Pages/AddService/AddService';
+import AdminDashbord from './Pages/AdminDashbord/AdminDashbord';
+import ReportDetails from './Pages/ReportDetails/ReportDetails';
+import GitJob from './Pages/GitJob/GitJob';
+import Service from './Pages/Service/Service';
  
  
  
@@ -83,6 +89,32 @@ function App() {
   path: "job",
   element: <Job/>
 },
+ {
+  path: "job-details",
+  element: <JobDetails/>
+},
+{
+  path: "add-service",
+  element: <AddService/>
+},
+{
+  path: "add-dashbord",
+  element: <AdminDashbord/>
+},
+{
+  path: "report-details",
+  element: <ReportDetails/>
+},
+{
+  path: "git-job",
+  element: <GitJob/>
+},
+{
+  path: "service",
+  element: <Service/>
+},
+   
+   
               
               
                
