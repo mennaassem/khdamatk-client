@@ -26,6 +26,8 @@ import AdminDashbord from './Pages/AdminDashbord/AdminDashbord';
 import ReportDetails from './Pages/ReportDetails/ReportDetails';
 import GitJob from './Pages/GitJob/GitJob';
 import Service from './Pages/Service/Service';
+import FindFreelancersPage from './Pages/FindFreelancersPage/FindFreelancersPage';
+import ProvidersProvider from './Components/Context/ProvidersContext';
  
  
  
@@ -81,9 +83,9 @@ function App() {
 },
  {
   path: "profile",
-  element: <ProtectedRout>
+  element:  
     <Profile/>
-  </ProtectedRout>
+   
 },
    {
   path: "job",
@@ -112,6 +114,10 @@ function App() {
 {
   path: "service",
   element: <Service/>
+},
+{
+  path: "find-freelancers-page",
+  element: <FindFreelancersPage/>
 },
    
    
@@ -157,8 +163,10 @@ function App() {
         <AuthProvider>
   <ThemeProvider>
        <ThemeWrapper>
-       <RouterProvider router={router}/>
+        <ProvidersProvider>
+          <RouterProvider router={router}/>
        <ToastContainer position='top-right' autoClose={3000} closeButton={false} closeOnClick/>
+        </ProvidersProvider>
     </ThemeWrapper>
   </ThemeProvider>
 </AuthProvider>

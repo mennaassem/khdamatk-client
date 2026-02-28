@@ -105,3 +105,42 @@ export async function sendDataToVerifyCode(values) {
     throw error;
   }
 }
+export async function setNewPassword(values) {
+  try {
+    const options = {
+      method: "POST",
+      url: "/Auth/set-password",
+      data:{
+        email:  localStorage.getItem("email") || '',
+        currentPassword: localStorage.getItem("password") || '',
+        newPassword: ''
+      }
+    };
+
+    const { data } = await apiClient.request(options);
+    return data;
+
+  } catch (error) {
+    throw error.response?.data || error;
+  }
+}
+ 
+
+export async function getAllProviders(type = "", value = "") {
+  try {
+    const option = {
+      method: "GET",
+      url: "/api/ServiceProvider/Freelancers",  
+       params: {
+          Type: type,
+          Value: value,
+        },
+    };
+
+    const { data } = await apiClient.request(option);
+    return data;
+
+  } catch (error) {
+    throw error;
+  }
+}

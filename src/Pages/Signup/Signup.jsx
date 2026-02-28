@@ -31,31 +31,12 @@ export default function Signup() {
        terms:yup.boolean().oneOf([true],"You must accept the terms and conditions")
        
     })
-     async function handleSignUp(values){
-        
-        // try {
-            
-        //     const response= await sendDataToSignup(values)
-        //     if(response.isSuccess){
-        //         toast("Account created! Please check your email to confirm.")
-        //         setTimeout(()=>{
-        //             navigate('/login')
-        //         },3000)
-                
-                
-        //     }
-        // } catch (error) {
-            // if(error.response.data.errors[0].title === "DuplicateUserName"){
-            //     setUsernameError(error.response.data.errors[0].message)
-
-            // }
-            // console.log(error)
-            // setIsExistError(error.response.data.message)
-      
-        // }   
+     async function handleSignUp(values){ 
         try {
   const response = await sendDataToSignup(values);
   if (response.isSuccess) {
+    localStorage.setItem("email", values.email);
+    localStorage.setItem("password", values.password);
     toast("Account created! Please check your email to confirm.");
     setTimeout(() => {
       navigate('/send-confirm-email');

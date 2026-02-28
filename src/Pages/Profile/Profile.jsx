@@ -1,5 +1,7 @@
-import React from 'react'
+ 
 
+ 
+ 
 export default function Profile() {
   return (
      <>
@@ -72,7 +74,7 @@ export default function Profile() {
             </div>
           </div>
 
-          {/* Average per hour & Bio */}
+{/* Average per hour & Bio */}
           <div className="border-b border-gray-200 pb-10 mb-10">
               <div className="flex justify-between items-center mb-4">
                   <span className="text-gray-700 font-bold text-xl">Average per hour</span>
@@ -187,7 +189,6 @@ export default function Profile() {
                     <i className="fa-solid fa-plus text-white text-xl"></i>
                 </div>
             </div>
-
             <div className="flex gap-8 items-start bg-gray-50/50 p-6 rounded-2xl border border-gray-100">
                 <div className="p-4 bg-white rounded-2xl shadow-sm">
                      <i className="fa-solid fa-certificate text-6xl text-purple-900"></i>
