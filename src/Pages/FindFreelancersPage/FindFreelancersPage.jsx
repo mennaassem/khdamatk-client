@@ -3,10 +3,11 @@ import FreelancersSidebar from '../../Components/FreelancersSidebar/FreelancersS
 import FreelancerProfileCard from '../../Components/FreelancerProfileCard/FreelancerProfileCard'
 import FreelancerCard from '../../Components/FreelancerCard/FreelancerCard'
 import { data } from 'react-router-dom'
-import { ProvidersContext } from '../../Components/Context/ProvidersContext'
+import { ProvidersContext, useProviders } from '../../Components/Context/ProvidersContext'
 
 export default function FindFreelancersPage() {
    const { providers, loading } = useContext(ProvidersContext);
+  // const { providers, fetchProviders } = useProviders();
   return (
      <>
      <main className='pt-24 bg-Purple-500 text-white text-center pb-9' >
