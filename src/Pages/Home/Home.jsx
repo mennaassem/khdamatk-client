@@ -10,6 +10,12 @@ import Feature from '../../Components/Feature/Feature'
 import Freelancer from '../../Components/Freelancer/Freelancer'
 import ClientReviews from '../../Components/ClientReviews/ClientReviews'
 import { Link } from 'react-router-dom'
+import SkillsModification from '../../Components/ModalPage/SkillsModification'
+import UploadProtolio from '../../Components/ModalPage/UploadProtolio'
+import AddPortfolio from '../../Components/ModalPage/AddPortfolio'
+import AddEducational from '../../Components/ModalPage/AddEducational'
+import AddCertificate from '../../Components/ModalPage/AddCertificate'
+import AddExperience from '../../Components/ModalPage/AddExperience'
  
 
 export default function Home() {
@@ -231,6 +237,7 @@ transition-colors duration-300">
   
   <WhyChooesUs/>
   </div>
+ 
   
   </>
   )
