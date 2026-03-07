@@ -2,8 +2,10 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPen, faStar, faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import AddCertificate from "../ModalPage/AddCertificate";
 
 export default function ProfileHeader() {
+   const [isEditOpen, setIsEditOpen] = useState(false);
 
    
 
@@ -13,20 +15,23 @@ export default function ProfileHeader() {
         <div>
 
           {/* Cover */}
-          <div className="h-28 bg-black relative">
-            <button
-             
-            >
-              <FontAwesomeIcon icon={faTrash} />
-            </button>
+         <div className="h-28 bg-black relative">
 
-            <button
-             
-            >
-              <FontAwesomeIcon icon={faPen} />
-            </button>
-          </div>
+  <button className="absolute">
+    <FontAwesomeIcon className="text-white" icon={faTrash} />
+  </button>
 
+  <button
+    onClick={() => setIsEditOpen(true)}
+    className="absolute top-3 right-4"
+  >
+    <FontAwesomeIcon className="text-white" icon={faPen} />
+    
+  </button>
+  <p>kkkkkkkk</p>
+
+</div>
+ 
           {/* Profile Info */}
           <div className="relative  px-6 pb-6">
             {/* Avatar */}
@@ -82,7 +87,22 @@ export default function ProfileHeader() {
         </div>
       </div>
 
-     
+  {isEditOpen && (
+  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className="bg-white   max-h-[90vh] overflow-y-auto p-6 rounded-xl relative">
+
+      <button
+        className="absolute top-4 right-4"
+        onClick={() => setIsEditOpen(false)}
+      >
+        ✖
+      </button>
+
+       <AddCertificate/>
+
+    </div>
+  </div>
+)}
       
     </>
   );
