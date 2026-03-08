@@ -19,7 +19,7 @@ export default function Navbar() {
 
   return (
     <>
-    <div className=' flex items-center justify-between bg-white shadow fixed top-0 left-0 w-full z-50  p-4  dark:text-gray-200 dark:bg-gray-950 dark:border-gray-800'>
+    <div className='mb-3 flex items-center justify-between bg-white shadow fixed top-0 left-0 w-full z-50  p-4  dark:text-gray-200 dark:bg-gray-950 dark:border-gray-800'>
               <Link to="/" className='text-Purple-400 font-bold text-2xl'>KHADMA <span className='text-amber-500'> HUB</span></Link>
               <div className=' hidden lg:flex items-center gap-8'>
                 <button className=' flex items-center gap-2'>
