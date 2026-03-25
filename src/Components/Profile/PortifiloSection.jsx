@@ -3,7 +3,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
 import PortifiloCard from './../PortifiloCard/PortifiloCard';
-import AddPortfolio from '../ModalPage/AddExperience';
+import AddPortfolio from '../ModalPage/AddPortfolio';
+
  
 
 export default function PortfolioSection() {
