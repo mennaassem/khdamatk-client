@@ -28,7 +28,8 @@ import GitJob from './Pages/GitJob/GitJob';
 import Service from './Pages/Service/Service';
 import FindFreelancersPage from './Pages/FindFreelancersPage/FindFreelancersPage';
 import ProvidersProvider from './Components/Context/ProvidersContext';
- 
+import EmptyDashboard from './Pages/Dashboard/EmptyDashboard';
+
  
  
  
@@ -119,7 +120,10 @@ function App() {
   path: "find-freelancers-page",
   element: <FindFreelancersPage/>
 },
-   
+ {
+path: "Dashboard",
+element: <EmptyDashboard/>
+},
    
               
               
