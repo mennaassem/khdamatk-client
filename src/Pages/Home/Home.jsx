@@ -72,7 +72,7 @@ transition-colors duration-300">
   <div>
     <img 
       src={homePhoto} 
-      className="dark:brightness-90 dark:contrast-110 transition"
+      className="dark:brightness-90 dark:contrast-110 transition "
     />
   </div>
 

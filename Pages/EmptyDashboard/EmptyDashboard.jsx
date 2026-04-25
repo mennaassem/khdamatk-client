@@ -15,7 +15,7 @@ import {
     faApple 
 } from '@fortawesome/free-brands-svg-icons';
 
-export default function Proposals() {
+export default function EmptyDashboard() {
     // حالة للتحكم في التبويب النشط
     const [activeTab, setActiveTab] = useState('waiting');
 
@@ -49,7 +49,7 @@ export default function Proposals() {
             </header>
 
             {/* --- Black Banner --- */}
-            <div className="bg-[#1c1e21] text-white text-center pt-12 pb-24 text-3xl font-bold">
+            <div className="bg-Purple-500 text-white text-center pt-12 pb-24 text-3xl font-bold">
                 Your proposals
             </div>
 
@@ -113,58 +113,7 @@ export default function Proposals() {
                     )}
                 </div>
             </main>
-
-            {/* --- Footer Section --- */}
-            <footer className="bg-[#5b45b0] text-white pt-12 pb-5 px-[8%] mt-auto">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 pb-8 border-b border-white/10">
-                    
-                    {/* Brand & Social */}
-                    <div className="space-y-5">
-                        <div className="text-xl font-bold text-white uppercase">
-                            KHADMA <span className="text-[#f2a93b]">HUB</span>
-                        </div>
-                        <div className="flex gap-4">
-                            <div className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center cursor-pointer hover:bg-white/20 transition">
-                                <FontAwesomeIcon icon={faFacebookF} className="text-sm" />
-                            </div>
-                            <div className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center cursor-pointer hover:bg-white/20 transition">
-                                <FontAwesomeIcon icon={faGoogle} className="text-sm" />
-                            </div>
-                            <div className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center cursor-pointer hover:bg-white/20 transition">
-                                <FontAwesomeIcon icon={faApple} className="text-sm" />
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* About Column */}
-                    <div>
-                        <h4 className="font-semibold mb-4 text-white">About</h4>
-                        <ul className="space-y-2 text-[13px] text-[#d1c8f1]">
-                            <li className="cursor-pointer hover:text-white">About Us</li>
-                            <li className="cursor-pointer hover:text-white">Why KHADMA HUB</li>
-                            <li className="cursor-pointer hover:text-white">Reviews & Testimonials</li>
-                        </ul>
-                    </div>
-
-                    {/* Find Jobs Column */}
-                    <div>
-                        <h4 className="font-semibold mb-4 text-white">Find Jobs</h4>
-                        <ul className="space-y-2 text-[13px] text-[#d1c8f1]">
-                            <li className="cursor-pointer hover:text-white">Development jobs</li>
-                            <li className="cursor-pointer hover:text-white">Writing jobs</li>
-                            <li className="cursor-pointer hover:text-white">Designers jobs</li>
-                        </ul>
-                    </div>
-
-                    {/* Button Column */}
-                    <div>
-                        <h4 className="font-semibold mb-4 text-white">Sub-Heading</h4>
-                        <button className="w-full border border-white/30 py-3 rounded text-[14px] text-[#d1c8f1] hover:bg-white/5 transition">
-                            Button Text
-                        </button>
-                    </div>
-                </div>
-            </footer>
+ 
         </div>
     );
 }

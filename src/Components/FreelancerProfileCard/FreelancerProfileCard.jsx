@@ -25,9 +25,15 @@ export default function FreelancerProfileCard({ provider }) {
         ))}
       </div>
 
-      <Link to="/profile" className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition">
+      {/* <Link to="/profile" className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition">
         View Profile
-      </Link>
+      </Link> */}
+      <Link 
+  to={`/profile/${provider.id}`} 
+  className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition"
+>
+  View Profile
+</Link>
     </div>
   );
 }

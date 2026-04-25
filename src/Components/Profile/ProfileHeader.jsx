@@ -1,109 +1,108 @@
 
-import { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faPen, faStar, faLocationDot } from "@fortawesome/free-solid-svg-icons";
-import AddCertificate from "../ModalPage/AddCertificate";
+ import logoPhoto from '../../assets/Images/Logo.png'
+ import { useEffect, useState } from "react";
+import EditInfo from './../ModalPage/EditInfo'
+ 
+ 
+ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faTrash,
+  faPen,
+  faStar,
+  faLocationDot,
+  faPenToSquare,
+} from "@fortawesome/free-solid-svg-icons";
+import ProfileDetails from './ProfileDetails';
+import { getFreelancerProfile } from '../../Services/api-profile';
+import { useParams } from 'react-router-dom';
+ 
+ 
 
 export default function ProfileHeader() {
-   const [isEditOpen, setIsEditOpen] = useState(false);
-
+  const [profile, setProfile] = useState(null);
+const { userId } = useParams();
    
+    const [isEditOpen, setIsEditOpen] = useState(false);
+    async function fetchProfile() {
+  const res = await getFreelancerProfile(userId);
+  setProfile(res);
+}
+   useEffect(() => {
+  fetchProfile();
+}, [userId]);
 
-  return (
-    <>
-      <div>
-        <div>
-
-          {/* Cover */}
-         <div className="h-28 bg-black relative">
-
-  <button className="absolute">
-    <FontAwesomeIcon className="text-white" icon={faTrash} />
-  </button>
-
-  <button
-    onClick={() => setIsEditOpen(true)}
-    className="absolute top-3 right-4"
-  >
-    <FontAwesomeIcon className="text-white" icon={faPen} />
-    
-  </button>
-  <p>kkkkkkkk</p>
-
-</div>
  
-          {/* Profile Info */}
-          <div className="relative  px-6 pb-6">
-            {/* Avatar */}
-            <div className="absolute -top-12 left-6 w-24 h-24 bg-gray-300 rounded-full border-4 border-white"></div>
+// };
+ return (
+  <>
+    <div className="mt-10">
+      {/* Cover */}
+      <div className="h-32 relative bg-gray-800">
+        <img src={logoPhoto} className="w-full h-full object-cover" />
 
-            <div className="pt-16">
-              <h2 className="text-xl font-semibold">Omnia Salah</h2>
+        <button className="absolute top-3 left-4 text-white">
+          <FontAwesomeIcon icon={faTrash} />
+        </button>
 
-              <div className="flex items-center gap-2 text-sm text-gray-500 mt-1">
-                <span>Member since 2025 Nov</span>
-                <div className="flex gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <FontAwesomeIcon
-                      key={i}
-                      icon={faStar}
-                      className="text-gray-400"
-                    />
-                  ))}
-                </div>
-                <span>(0)</span>
-              </div>
+        <button className="absolute top-3 right-4 text-white">
+          <FontAwesomeIcon icon={faPen} />
+        </button>
+          {/* profile-image */}
+        <div className="absolute left-32 -bottom-3 transform -translate-x-1/2 translate-y-1/3 z-30">
+          
+  <div className="relative w-fit">
+    
+    <img
+      src={logoPhoto}
+      className="rounded-full size-28 object-cover border-4 border-white"
+    />
 
-              <div className="flex items-center gap-2 text-sm text-gray-600 mt-1">
-                <FontAwesomeIcon icon={faLocationDot} />
-                <span>Cairo, Egypt</span>
-              </div>
+    {/* delete */}
+    <div className="absolute -left-3 top-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow">
+      <FontAwesomeIcon className="text-red-500 text-sm" icon={faTrash} />
+    </div>
 
-              <div className="flex justify-between mt-4 text-sm">
-                <div>
-                  <p className="font-medium">Software engineer</p>
-                </div>
-                <div className="text-right">
-                  <p>2 years experience</p>
-                  <p>Working 3 hours a week</p>
-                </div>
-              </div>
+    {/* edit */}
+    <div className="absolute -right-3 top-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow">
+      <FontAwesomeIcon className="text-black text-sm" icon={faPen} />
+    </div>
 
-              <button className="mt-4 bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700">
-                Contact me
-              </button>
+  </div>
+</div>
+      </div>
+      
+      {/* Profile Info */}
+      <div className="relative px-6 pb-6 bg-white">
+       
+ 
+        <div className="flex items-center justify-between">
+          {/* User Profile Details (Name, Join Date, Rating, Location */}
 
-              {/* Price Section */}
-              <div className="mt-6 border-t pt-4 flex justify-between text-sm font-medium">
-                <span>Average per hour</span>
-                <span>50 EG/HR</span>
-              </div>
+          <ProfileDetails/>
 
-              <p className="mt-3 text-sm text-gray-600">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit...
-              </p>
-            </div>
+          <div>
+            <FontAwesomeIcon
+              className="text-xl cursor-pointer"
+              icon={faPenToSquare}
+              onClick={() => setIsEditOpen(true)}
+            />
           </div>
         </div>
       </div>
-
-  {isEditOpen && (
-  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-    <div className="bg-white   max-h-[90vh] overflow-y-auto p-6 rounded-xl relative">
-
-      <button
-        className="absolute top-4 right-4"
-        onClick={() => setIsEditOpen(false)}
-      >
-        ✖
-      </button>
-
-       <AddCertificate/>
-
     </div>
-  </div>
-)}
-      
-    </>
-  );
+
+    {/* Modal */}
+    {isEditOpen && (
+//       <EditInfo
+ 
+//   onClose={() => setIsEditOpen(false)}
+  
+// />
+<EditInfo
+  onClose={() => setIsEditOpen(false)}
+  refetch={fetchProfile}
+/>
+    )}
+  </>
+);
 }
