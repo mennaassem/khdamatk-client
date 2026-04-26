@@ -64,6 +64,7 @@ export async function sendDataToEducation(values) {
     };
 
     console.log("DATA SENT:", optain.data);
+    console.log("DATA SENT:", values);
 
     const { data } = await apiClient.request(optain);
     return data;

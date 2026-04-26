@@ -6,10 +6,10 @@ import { useParams } from "react-router-dom";
 import ProfileDetailsSkeleton from "../Skeleton/ProfileDetailsSkeleton";
  
 
-export default function ProfileDetails() {
+export default function ProfileDetails({ profile }) {
   // const { userId } = useParams();
-  const [profile, setProfile] = useState(null);
-const [loading, setIsLoading] = useState(true);
+//   const [profile, setProfile] = useState(null);
+// const [loading, setIsLoading] = useState(true);
  
 
  
@@ -29,14 +29,25 @@ async function fetchDataToProfileDetails() {
   }
 }
 
-useEffect(() => {
-  fetchDataToProfileDetails();
-}, []);
+// useEffect(() => {
+//   fetchDataToProfileDetails();
+// }, []);
+// useEffect(() => {
+//   fetchDataToProfileDetails();
+// }, [userId]);
  
- if (loading || !profile) {
-  return <ProfileDetailsSkeleton />;
+//  if (loading || !profile) {
+//   return <ProfileDetailsSkeleton />;
+// }
+if (!profile) return <ProfileDetailsSkeleton />;
+function formatUrl(url) {
+  if (!url) return "#";
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    return url;
+  }
+  return "https://" + url;
 }
-
+console.log("PROFILE:", profile);
 
   return (
     <div className="pt-14">
@@ -86,19 +97,51 @@ useEffect(() => {
         {profile.bio}
       </p>
       {/* Social Media */}
- <div className="flex gap-3 mt-4">
-{/* 
-  <a href={profile.facebookUrl} target="_blank" className="text-blue-600">
-    Facebook
-  </a>
+<div className="flex gap-3 mt-4">
 
-  <a href={profile.githubUrl} target="_blank" className="text-gray-800">
-    GitHub
-  </a>
+  {profile.facebookUrl && (
+    <a
+      href={formatUrl(profile.facebookUrl)}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-blue-600 hover:underline"
+    >
+      Facebook
+    </a>
+  )}
 
-  <a href={profile.linkedInUrl} target="_blank" className="text-blue-700">
-    LinkedIn
-  </a> */}
+  {profile.githubUrl && (
+    <a
+      href={formatUrl(profile.githubUrl)}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-gray-800 hover:underline"
+    >
+      GitHub
+    </a>
+  )}
+
+  {profile.linkedInUrl && (
+    <a
+      href={formatUrl(profile.linkedInUrl)}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-blue-700 hover:underline"
+    >
+      LinkedIn
+    </a>
+  )}
+
+  {profile.twitterUrl && (
+    <a
+      href={formatUrl(profile.twitterUrl)}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-sky-500 hover:underline"
+    >
+      Twitter
+    </a>
+  )}
 
 </div>
   

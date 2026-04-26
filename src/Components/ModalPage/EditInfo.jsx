@@ -182,71 +182,65 @@ const formik = useFormik({
           <h3 className="text-2xl font-semibold mb-4">Social Media</h3>
 
           <div className="grid grid-cols-2 gap-6 mb-10">
+       {/* Facebook */}
+<div>
+  <input
+    name="facebookUrl"
+    placeholder="https://facebook.com/username"
+    value={formik.values.facebookUrl}
+    onChange={formik.handleChange}
+    onBlur={formik.handleBlur}
+    className="w-full bg-transparent border-b border-black outline-none py-1"
+  />
+  {formik.touched.facebookUrl && formik.errors.facebookUrl && (
+    <p className="text-red-500 text-sm">{formik.errors.facebookUrl}</p>
+  )}
+</div>
 
-            {/* <input
-              name="facebookUrl"
-              placeholder="Facebook"
-              value={formik.values.facebookUrl}
-              onChange={formik.handleChange}
-              className="w-full bg-transparent border-b border-black outline-none py-1"
-            />
+{/* GitHub */}
+<div>
+  <input
+    name="githubUrl"
+    placeholder="https://github.com/username"
+    value={formik.values.githubUrl}
+    onChange={formik.handleChange}
+    onBlur={formik.handleBlur}
+    className="w-full bg-transparent border-b border-black outline-none py-1"
+  />
+  {formik.touched.githubUrl && formik.errors.githubUrl && (
+    <p className="text-red-500 text-sm">{formik.errors.githubUrl}</p>
+  )}
+</div>
 
-            <input
-              name="githubUrl"
-              placeholder="GitHub"
-              value={formik.values.githubUrl}
-              onChange={formik.handleChange}
-              className="w-full bg-transparent border-b border-black outline-none py-1"
-            />
+{/* LinkedIn */}
+<div>
+  <input
+    name="linkedInUrl"
+    placeholder="https://linkedin.com/in/username"
+    value={formik.values.linkedInUrl}
+    onChange={formik.handleChange}
+    onBlur={formik.handleBlur}
+    className="w-full bg-transparent border-b border-black outline-none py-1"
+  />
+  {formik.touched.linkedInUrl && formik.errors.linkedInUrl && (
+    <p className="text-red-500 text-sm">{formik.errors.linkedInUrl}</p>
+  )}
+</div>
 
-            <input
-              name="linkedInUrl"
-              placeholder="LinkedIn"
-              value={formik.values.linkedInUrl}
-              onChange={formik.handleChange}
-              className="w-full bg-transparent border-b border-black outline-none py-1"
-            />
-
-            <input
-              name="twitterUrl"
-              placeholder="Twitter"
-              value={formik.values.twitterUrl}
-              onChange={formik.handleChange}
-              className="w-full bg-transparent border-b border-black outline-none py-1"
-            /> */}
-            {/* Social */}
-          <input
-            name="facebookUrl"
-            placeholder="Facebook URL"
-            value={formik.values.facebookUrl}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-
-          <input
-            name="githubUrl"
-            placeholder="GitHub URL"
-            value={formik.values.githubUrl}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-
-          <input
-            name="linkedInUrl"
-            placeholder="LinkedIn URL"
-            value={formik.values.linkedInUrl}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-
-          <input
-            name="twitterUrl"
-            placeholder="Twitter URL"
-            value={formik.values.twitterUrl}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-
+{/* Twitter */}
+<div>
+  <input
+    name="twitterUrl"
+    placeholder="https://twitter.com/username"
+    value={formik.values.twitterUrl}
+    onChange={formik.handleChange}
+    onBlur={formik.handleBlur}
+    className="w-full bg-transparent border-b border-black outline-none py-1"
+  />
+  {formik.touched.twitterUrl && formik.errors.twitterUrl && (
+    <p className="text-red-500 text-sm">{formik.errors.twitterUrl}</p>
+  )}
+</div>
           </div>
 
           {/* Buttons */}

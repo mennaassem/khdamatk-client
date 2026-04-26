@@ -78,7 +78,8 @@ const { userId } = useParams();
         <div className="flex items-center justify-between">
           {/* User Profile Details (Name, Join Date, Rating, Location */}
 
-          <ProfileDetails/>
+          {/* <ProfileDetails/> */}
+          <ProfileDetails profile={profile} />
 
           <div>
             <FontAwesomeIcon
