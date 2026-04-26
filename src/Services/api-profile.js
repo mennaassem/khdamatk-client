@@ -74,5 +74,19 @@ export async function sendDataToEducation(values) {
     throw error;
   }
 }
+ 
+export async function updateSkills(data = {}) {
+  const { skillIds = [] } = data;
+
+  const res = await apiClient.put(
+    "/api/ServiceProvider/update-skills",
+    {
+      skillIds
+    }
+  );
+
+  return res.data;
+}
+ 
 
 
