@@ -13,34 +13,7 @@ export async function getFreelancerProfile(userId) {
     console.log(error.response?.data || error.message);
     throw error;
   }
-}
-
- 
-export async function sendDataToEducation(values) {
-  try {
-    const optain = {
-      method: "POST",
-     url: `/api/ServiceProvider/add-education`,
-      data: {
-        schoolName: values.university,
-        degree: values.degree,
-        fieldOfStudy: values.specialization,
-        description: values.description,
-        startDate: new Date(values.from).toISOString(),
-        endDate: values.to ? new Date(values.to).toISOString() : null
-      }
-    };
-
-    console.log("DATA SENT:", optain.data);
-
-    const { data } = await apiClient.request(optain);
-    return data;
-
-  } catch (error) {
-    console.log(error.response?.data);
-    throw error;
-  }
-}
+} 
  export async function updateBasicInfo(values) {
   try {
      
@@ -74,18 +47,33 @@ export async function sendDataToEducation(values) {
     throw error;
   }
 }
- 
 export async function updateSkills(data = {}) {
-  const { skillIds = [] } = data;
+  const { skills = [] } = data;
 
   const res = await apiClient.put(
     "/api/ServiceProvider/update-skills",
     {
-      skillIds
+      skills
     }
   );
 
   return res.data;
+}
+export async function sendDataToEducation(payload) {
+  try {
+    console.log("FINAL PAYLOAD:", payload);
+
+    const response = await apiClient.post(
+      "/api/ServiceProvider/add-education",
+      payload
+    );
+
+    return response.data;
+
+  } catch (error) {
+    console.log(error.response?.data);
+    throw error;
+  }
 }
  
 

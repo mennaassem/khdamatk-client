@@ -68,8 +68,8 @@ import SkillsModification from './../ModalPage/SkillsModification';
 import { getFreelancerProfile } from '../../Services/api-profile';
 
 export default function SkillsSection() {
-
   const { userId } = useParams();
+
   const [skills, setSkills] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -112,7 +112,7 @@ export default function SkillsSection() {
         <SkillsModification
           closeModal={() => setIsModalOpen(false)}
           setSkills={setSkills}
-          initialSkills={skills}   // 👈 مهم جدًا
+          initialSkills={skills}
         />
       )}
     </>

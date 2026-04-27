@@ -44,85 +44,98 @@
 //     </div>
 //   )
 // }
-   import { useState, useEffect } from "react";
+  import { useState, useEffect } from "react";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { updateSkills } from "../../Services/api-profile";
+import { getFreelancerProfile, updateSkills } from "../../Services/api-profile";
+import { useParams } from "react-router-dom";
 
 export default function SkillsModification({
   closeModal,
   setSkills,
   initialSkills
 }) {
+  const { userId } = useParams();
 
-  const [input, setInput] = useState("");
+  const [allSkills, setAllSkills] = useState([]);
   const [selectedSkills, setSelectedSkills] = useState([]);
 
-  // 👇 لما المودال يفتح خد الداتا الحالية
+  // تحميل skills الحالية
   useEffect(() => {
     setSelectedSkills(initialSkills || []);
   }, [initialSkills]);
 
-  // ➕ add skill
-  const addSkill = () => {
-    if (!input.trim()) return;
+  // تحميل كل skills من السيرفر
+  useEffect(() => {
+    async function fetchSkills() {
+      try {
+        const res = await fetch("https://localhost:7210/api/skills");
+        const data = await res.json();
+        setAllSkills(data || []);
+      } catch (err) {
+        console.error(err);
+      }
+    }
 
-    setSelectedSkills(prev => [
-      ...prev,
-      { id: Date.now(), name: input }
-    ]);
+    fetchSkills();
+  }, []);
 
-    setInput("");
+  // إضافة skill
+  const handleSelect = (e) => {
+    const id = Number(e.target.value);
+    const skill = allSkills.find(s => s.id === id);
+
+    if (!skill) return;
+
+    if (selectedSkills.some(s => s.id === skill.id)) return;
+
+    setSelectedSkills(prev => [...prev, skill]);
   };
 
-  // ❌ remove skill
+  // حذف skill
   const removeSkill = (id) => {
-    setSelectedSkills(prev =>
-      prev.filter(s => s.id !== id)
-    );
+    setSelectedSkills(prev => prev.filter(s => s.id !== id));
   };
 
-  // 💾 save
+  // حفظ
   const handleSave = async () => {
+    try {
+      const skillIds = selectedSkills.map(s => s.id);
 
-    const skillNames = selectedSkills.map(s => s.name);
+      await updateSkills({ skillIds });
 
-    await updateSkills({
-      skills: skillNames
-    });
+      const updated = await getFreelancerProfile(userId);
+      setSkills(updated.skills || []);
 
-    setSkills(selectedSkills); // 👈 يرجع للصفحة الرئيسية
+      closeModal();
 
-    closeModal();
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
+    <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
 
       <div className="bg-white p-5 w-[500px] rounded">
 
         <h2 className="font-bold mb-4">Skills Modification</h2>
 
-        {/* INPUT */}
-        <div className="flex gap-2 mb-4">
+        {/* SELECT SKILL */}
+        <select
+          onChange={handleSelect}
+          className="border p-2 w-full mb-4"
+        >
+          <option value="">Select skill</option>
 
-          <input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            className="border p-2 flex-1"
-            placeholder="Add skill"
-          />
+          {allSkills.map(skill => (
+            <option key={skill.id} value={skill.id}>
+              {skill.name}
+            </option>
+          ))}
+        </select>
 
-          <button
-            onClick={addSkill}
-            className="bg-blue-500 text-white px-3"
-          >
-            Add
-          </button>
-
-        </div>
-
-        {/* SKILLS */}
+        {/* SELECTED SKILLS */}
         <div className="flex flex-wrap gap-2 mb-4">
 
           {selectedSkills.map(skill => (
@@ -154,7 +167,7 @@ export default function SkillsModification({
 
           <button
             onClick={handleSave}
-            className="px-3 py-1 bg-green-500 text-white"
+            className="px-3 py-1 bg-purple-600 text-white"
           >
             Save
           </button>

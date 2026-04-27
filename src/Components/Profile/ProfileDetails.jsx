@@ -47,7 +47,7 @@ function formatUrl(url) {
   }
   return "https://" + url;
 }
-console.log("PROFILE:", profile);
+// console.log("PROFILE:", profile);
 
   return (
     <div className="pt-14">
