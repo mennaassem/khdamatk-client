@@ -271,7 +271,7 @@ export default function FinalDecision() {
               </div>
 
               {/* Accept Terms */}
-              <div className="boundary-t pt-4">
+              <div className="border-t pt-4">
                 <label className="flex items-center gap-3 cursor-pointer">
                   <input
                     type="checkbox"

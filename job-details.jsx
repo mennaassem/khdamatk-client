@@ -207,3 +207,12 @@ export default function JobDetails() {
     </div>
   );
 }
+                إرسال العرض
+              </button>
+            </form>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

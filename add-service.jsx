@@ -278,20 +278,19 @@ export default function AddService() {
                 <label className="block text-sm font-semibold text-gray-700 mb-3">
                   أضف صور أو ملفات (حتى 3 ملفات)
                 </label>
-                <div className="border-2 border-dashed border-purple-300 rounded-lg p-8 text-center cursor-pointer hover:bg-purple-50 transition">
+                <div className="border-2 border-dashed border-purple-300 rounded-lg p-8 text-center cursor-pointer hover:bg-purple-50 transition relative">
                   <input
                     type="file"
                     multiple
                     accept="image/*,.pdf"
                     onChange={handleFileUpload}
-                    className="hidden"
-                    id="file-upload"
+                    className="absolute inset-0 opacity-0 cursor-pointer"
                   />
-                  <label htmlFor="file-upload" className="cursor-pointer flex flex-col items-center">
+                  <div className="flex flex-col items-center pointer-events-none">
                     <Upload size={32} className="text-purple-700 mb-2" />
                     <p className="text-gray-700 font-semibold">انقر للتحميل</p>
                     <p className="text-xs text-gray-500 mt-1">أو اسحب وأسقط الملفات</p>
-                  </label>
+                  </div>
                 </div>
 
                 {/* Uploaded Files */}
@@ -300,12 +299,22 @@ export default function AddService() {
                     {uploadedFiles.map((file, idx) => (
                       <div
                         key={idx}
-                        className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border"
+                        className="flex items-center justify-between bg-purple-50 p-3 rounded-lg border border-purple-200"
                       >
-                        <span className="text-sm text-gray-700">{file.name}</span>
+                        <div className="flex items-center gap-2 flex-1">
+                          <FileText size={18} className="text-purple-700" />
+                          <div>
+                            <p className="text-sm font-semibold text-gray-800 truncate">
+                              {file.name}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              {(file.size / 1024).toFixed(2)} KB
+                            </p>
+                          </div>
+                        </div>
                         <button
                           onClick={() => removeFile(idx)}
-                          className="text-red-500 hover:text-red-700"
+                          className="text-red-600 hover:text-red-700"
                         >
                           <X size={18} />
                         </button>
@@ -319,48 +328,112 @@ export default function AddService() {
 
           {/* Right Column - Summary */}
           <div className="space-y-6">
-            {/* Service Preview */}
+            {/* Form Summary */}
             <div className="bg-white rounded-xl shadow p-6 sticky top-24">
-              <h3 className="text-xl font-bold mb-4">معاينة الخدمة</h3>
+              <h3 className="text-xl font-bold mb-4">ملخص الخدمة</h3>
 
-              <div className="space-y-4">
-                <div className="p-4 bg-gray-50 rounded-lg">
+              <div className="space-y-4 mb-6 pb-6 border-b">
+                <div>
                   <p className="text-xs text-gray-600 mb-1">اسم الخدمة</p>
-                  <p className="font-bold text-gray-800">
-                    {formData.serviceName || "سيظهر هنا اسم خدمتك"}
+                  <p className="font-semibold text-gray-800">
+                    {formData.serviceName || "لم يتم إدخال اسم"}
                   </p>
                 </div>
 
-                <div className="p-4 bg-gray-50 rounded-lg">
+                <div>
                   <p className="text-xs text-gray-600 mb-1">الفئة</p>
-                  <p className="font-bold text-gray-800">
-                    {formData.category || "لم تختر فئة"}
+                  <p className="font-semibold text-gray-800">
+                    {formData.category || "لم يتم الاختيار"}
                   </p>
                 </div>
 
-                <div className="p-4 bg-purple-50 rounded-lg">
+                <div>
                   <p className="text-xs text-gray-600 mb-1">السعر الأساسي</p>
                   <p className="text-2xl font-bold text-purple-700">
-                    {formData.basePrice ? `${formData.basePrice} EGP` : "0 EGP"}
+                    {formData.basePrice ? `${formData.basePrice} EGP` : "—"}
                   </p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="p-3 bg-gray-50 rounded-lg text-center">
-                    <p className="text-xs text-gray-600">التسليم</p>
-                    <p className="font-bold text-gray-800">
-                      {formData.deliveryTime || "0"} أيام
+                  <div>
+                    <p className="text-xs text-gray-600 mb-1">مدة التسليم</p>
+                    <p className="font-semibold text-gray-800">
+                      {formData.deliveryTime ? `${formData.deliveryTime} أيام` : "—"}
                     </p>
                   </div>
-                  <div className="p-3 bg-gray-50 rounded-lg text-center">
-                    <p className="text-xs text-gray-600">التعديلات</p>
-                    <p className="font-bold text-gray-800">
+                  <div>
+                    <p className="text-xs text-gray-600 mb-1">التعديلات</p>
+                    <p className="font-semibold text-gray-800">
                       {formData.revisions || "0"}
                     </p>
                   </div>
                 </div>
               </div>
+
+              {/* Status Indicator */}
+              {isFormValid ? (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4 flex items-start gap-3">
+                  <Check className="text-green-600 flex-shrink-0 mt-0.5" size={18} />
+                  <div>
+                    <p className="text-sm font-semibold text-green-700">
+                      النموذج كامل
+                    </p>
+                    <p className="text-xs text-green-600 mt-1">
+                      جميع الحقول المطلوبة مملوءة
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4 flex items-start gap-3">
+                  <AlertCircle
+                    className="text-yellow-600 flex-shrink-0 mt-0.5"
+                    size={18}
+                  />
+                  <div>
+                    <p className="text-sm font-semibold text-yellow-700">
+                      حقول مطلوبة
+                    </p>
+                    <p className="text-xs text-yellow-600 mt-1">
+                      الرجاء ملء جميع الحقول المشار إليها بـ *
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              <div className="space-y-2">
+                <button
+                  disabled={!isFormValid}
+                  className={`w-full py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition ${
+                    isFormValid
+                      ? "bg-gradient-to-r from-purple-700 to-purple-600 text-white hover:shadow-lg"
+                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  }`}
+                >
+                  <Plus size={18} /> حفظ واستمرار
+                </button>
+
+                <button className="w-full py-3 rounded-lg font-semibold text-purple-700 bg-purple-50 hover:bg-purple-100 transition">
+                  حفظ كمسودة
+                </button>
+              </div>
+
+              {/* Help Text */}
+              <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-xs text-blue-700 font-semibold mb-2">
+                  💡 نصيحة
+                </p>
+                <p className="text-xs text-blue-600 leading-relaxed">
+                  وضح تفاصيل خدمتك بشكل دقيق واختر سعراً تنافسياً لجذب المزيد من
+                  العملاء
+                </p>
+              </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
             {/* Action Buttons */}
             <div className="bg-white rounded-xl shadow p-6 space-y-3">
@@ -390,9 +463,4 @@ export default function AddService() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+
