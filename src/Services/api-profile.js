@@ -2,18 +2,38 @@ import { apiClient } from "./api-client"
 
 
 
+// export async function getFreelancerProfile(userId) {
+//   try {
+//     const { data } = await apiClient.get(
+//       `/api/ServiceProvider/freelancer-profile/${userId}`
+//     );
+    
+
+//     return data.data; //  
+//   } catch (error) {
+//     console.log(error.response?.data || error.message);
+//     throw error;
+//   }
+// } 
 export async function getFreelancerProfile(userId) {
   try {
+    if (!userId) {
+      throw new Error("userId is required");
+    }
+
     const { data } = await apiClient.get(
       `/api/ServiceProvider/freelancer-profile/${userId}`
     );
 
-    return data.data; //  
+    console.log("API RESPONSE:", data);
+
+    return data?.data ?? data;
+
   } catch (error) {
     console.log(error.response?.data || error.message);
     throw error;
   }
-} 
+}
  export async function updateBasicInfo(values) {
   try {
      
@@ -65,7 +85,12 @@ export async function sendDataToEducation(payload) {
 
     const response = await apiClient.post(
       "/api/ServiceProvider/add-education",
-      payload
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
     );
 
     return response.data;
@@ -75,6 +100,4 @@ export async function sendDataToEducation(payload) {
     throw error;
   }
 }
- 
-
 

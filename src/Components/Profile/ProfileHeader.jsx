@@ -21,6 +21,8 @@ import { useParams } from 'react-router-dom';
 export default function ProfileHeader() {
   const [profile, setProfile] = useState(null);
 const { userId } = useParams();
+
+console.log(userId)
    
     const [isEditOpen, setIsEditOpen] = useState(false);
     async function fetchProfile() {

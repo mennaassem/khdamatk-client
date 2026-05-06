@@ -28,8 +28,15 @@ import GitJob from './Pages/GitJob/GitJob';
 import Service from './Pages/Service/Service';
 import FindFreelancersPage from './Pages/FindFreelancersPage/FindFreelancersPage';
 import ProvidersProvider from './Components/Context/ProvidersContext';
+import EmptyDashboard from './../Pages/EmptyDashboard/EmptyDashboard';
+import ServicesPage from '../Pages/ServicesPage/ServicesPage';
+import ClientPropList from '../Pages/ClientPropList/ClientPropList';
+import MessagePage from '../Pages/MessagePage/MessagePage';
+import ServiceDetails from '../Pages/ServiceDetails/ServiceDetails';
+import SelectedFreeLancer from '../Pages/SelectedFreeLancer/SelectedFreeLancer';
  
-import EmptyDashboard from '../Pages/EmptyDashboard/EmptyDashboard';
+ 
+ 
 
  
  
@@ -125,10 +132,34 @@ function App() {
 path: "Dashboard",
 element: <EmptyDashboard/>
 },
+//  {
+// path: "message",
+// element: <Message/>
+// },
    
               
-              
-               
+     {
+path: "servicespage",
+element: <ServicesPage/>
+},          
+           {
+path: "clientproplist",
+element: <ClientPropList/>
+},      
+
+   {
+path: "messagepage",
+element: <MessagePage/>
+}, 
+   {
+path: "servicedetails",
+element: <ServiceDetails/>
+},
+
+   {
+path: "selectedfreelancer",
+element: <SelectedFreeLancer/>
+},
                
               {
                 path:'*',

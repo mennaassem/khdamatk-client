@@ -8,27 +8,7 @@ import FreelancerProfileCard from '../FreelancerProfileCard/FreelancerProfileCar
 
 export default function Freelancer() {
    const { providers, loading } = useContext(ProvidersContext);
-    // const[freelancer,setFreelancer]=useState([])
-    // const[loading,setLoading]=useState(true)
-    //  async function getFreelancerDetails(){
-    //     try {
-    //                 const response= await getHomeData()
-    //                 if(response.isSuccess){
-    //                     setLoading(false)
-    //                     setFreelancer(response.data.providers)
-    //                 }
-    //             } catch (error) {
-    //                 setLoading(true)
-    //                 console.log(error)
-                    
-    //             }
-    // }
-    // useEffect(()=>{
-    //    getFreelancerDetails() 
-    // },[])
-    // if(loading){
-    //   return <Loading/>
-    // }
+     
       const firstFourProviders = providers.slice(0, 4);
   return (
     <div className='dark:bg-gray-950 dark:text-white'>

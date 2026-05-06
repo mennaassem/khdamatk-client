@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 
 // FreelancerProfileCard.jsx
 export default function FreelancerProfileCard({ provider }) {
+  
+  console.log("provider =", provider);
   return (
     <div className="mb-6 rounded-2xl p-6 text-center shadow-sm hover:-translate-y-2 hover:shadow-xl transition-all duration-300 bg-white dark:bg-gray-900 border border-gray-100">
 
@@ -25,11 +27,9 @@ export default function FreelancerProfileCard({ provider }) {
         ))}
       </div>
 
-      {/* <Link to="/profile" className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition">
-        View Profile
-      </Link> */}
+       
       <Link 
-  to={`/profile/${provider.id}`} 
+to={`/profile/565d8146-aa5c-48cf-b25f-5edf7db61f34`}
   className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition"
 >
   View Profile

@@ -4,8 +4,8 @@ export default function PostJop() {
     <div className="bg-gray-50 pb-3 min-h-screen ">
 
       {/* Black Banner */}
-      <div className="bg-black text-white text-center p-10 text-3xl font-medium">
-        Post your jobs for free to receive professional proposals Now!
+      <div className="bg-purple-900 text-white text-center p-20   text-3xl font-medium">
+        <p className="mt-5"> Post your jobs for free to receive professional proposals Now!</p>
       </div>
 
       {/* Card Wrapper */}
