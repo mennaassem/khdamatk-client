@@ -15,6 +15,7 @@ import {
 
 export default function ServerPage() {
   const [selectedServer, setSelectedServer] = useState(null);
+  const [loadingServer, setLoadingServer] = useState(false);
 
   const servers = [
     {
@@ -80,6 +81,14 @@ export default function ServerPage() {
     { label: "وقت التشغيل", value: "99.89%", icon: BarChart3 },
   ];
 
+  const handleSelectServer = (serverId) => {
+    setLoadingServer(true);
+    setTimeout(() => {
+      setSelectedServer(serverId);
+      setLoadingServer(false);
+    }, 500);
+  };
+
   return (
     <div dir="rtl" className="bg-gray-100 min-h-screen font-sans">
       {/* Header */}
@@ -132,7 +141,7 @@ export default function ServerPage() {
           {servers.map((server) => (
             <div
               key={server.id}
-              onClick={() => setSelectedServer(server.id)}
+              onClick={() => handleSelectServer(server.id)}
               className="bg-white rounded-xl shadow hover:shadow-lg transition cursor-pointer p-6"
             >
               <div className="flex items-start justify-between mb-4">
@@ -216,65 +225,74 @@ export default function ServerPage() {
         {selectedServer && (
           <div className="bg-white rounded-xl shadow p-6 mt-8">
             <h2 className="text-2xl font-bold mb-6">تفاصيل الخادم</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-semibold mb-1">
-                    عنوان IP
-                  </label>
-                  <input
-                    type="text"
-                    value="192.168.1.100"
-                    disabled
-                    className="w-full bg-gray-100 border rounded p-2"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold mb-1">
-                    تاريخ البدء
-                  </label>
-                  <input
-                    type="text"
-                    value="2026-01-15"
-                    disabled
-                    className="w-full bg-gray-100 border rounded p-2"
-                  />
-                </div>
+            {loadingServer && (
+              <div className="flex items-center justify-center py-8">
+                <div className="text-gray-500">جاري التحميل...</div>
               </div>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-semibold mb-1">
-                    اسم المستخدم
-                  </label>
-                  <input
-                    type="text"
-                    value="admin"
-                    disabled
-                    className="w-full bg-gray-100 border rounded p-2"
-                  />
+            )}
+            {!loadingServer && (
+              <div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-semibold mb-1">
+                        عنوان IP
+                      </label>
+                      <input
+                        type="text"
+                        value="192.168.1.100"
+                        disabled
+                        className="w-full bg-gray-100 border rounded p-2"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold mb-1">
+                        تاريخ البدء
+                      </label>
+                      <input
+                        type="text"
+                        value="2026-01-15"
+                        disabled
+                        className="w-full bg-gray-100 border rounded p-2"
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-semibold mb-1">
+                        اسم المستخدم
+                      </label>
+                      <input
+                        type="text"
+                        value="admin"
+                        disabled
+                        className="w-full bg-gray-100 border rounded p-2"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold mb-1">
+                        تاريخ الانتهاء
+                      </label>
+                      <input
+                        type="text"
+                        value="2027-01-15"
+                        disabled
+                        className="w-full bg-gray-100 border rounded p-2"
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-sm font-semibold mb-1">
-                    تاريخ الانتهاء
-                  </label>
-                  <input
-                    type="text"
-                    value="2027-01-15"
-                    disabled
-                    className="w-full bg-gray-100 border rounded p-2"
-                  />
-                </div>
-              </div>
-            </div>
 
-            <div className="flex gap-4 mt-6">
-              <button className="flex-1 bg-purple-700 text-white py-2 rounded-lg font-semibold hover:bg-purple-800 flex items-center justify-center gap-2">
-                <Settings size={18} /> الإعدادات
-              </button>
-              <button className="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg font-semibold hover:bg-gray-300 flex items-center justify-center gap-2">
-                <Download size={18} /> تحميل البيانات
-              </button>
-            </div>
+                <div className="flex gap-4">
+                  <button className="flex-1 bg-purple-700 text-white py-2 rounded-lg font-semibold hover:bg-purple-800 flex items-center justify-center gap-2">
+                    <Settings size={18} /> الإعدادات
+                  </button>
+                  <button className="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg font-semibold hover:bg-gray-300 flex items-center justify-center gap-2">
+                    <Download size={18} /> تحميل البيانات
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
