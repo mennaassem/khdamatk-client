@@ -4,12 +4,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
 import PortifiloCard from './../PortifiloCard/PortifiloCard';
 import AddPortfolio from '../ModalPage/AddPortfolio';
+import { jwtDecode } from 'jwt-decode';
+import { useParams } from 'react-router-dom';
 
  
 
 export default function PortfolioSection() {
 
   const [isModalOpen, setIsModalOpen] = useState(false)
+   const token = localStorage.getItem("token");
+    const { userId } = useParams();
+      
+      const user = token ? jwtDecode(token) : null;
 
   return (
     <>
@@ -19,7 +25,9 @@ export default function PortfolioSection() {
         <h1 className='flex items-center justify-between'>
           <span className='font-bold'>Portfolio</span>
 
-          <button
+          
+           {user?.UserId == userId && (
+         <button
             className='btn w-fit bg-purple-200'
             onClick={() => setIsModalOpen(true)}
           >
@@ -28,6 +36,7 @@ export default function PortfolioSection() {
               icon={faPlus}
             />
           </button>
+          )}
 
         </h1>
 

@@ -1,20 +1,7 @@
 import { apiClient } from "./api-client"
 
 
-
-// export async function getFreelancerProfile(userId) {
-//   try {
-//     const { data } = await apiClient.get(
-//       `/api/ServiceProvider/freelancer-profile/${userId}`
-//     );
-    
-
-//     return data.data; //  
-//   } catch (error) {
-//     console.log(error.response?.data || error.message);
-//     throw error;
-//   }
-// } 
+  
 export async function getFreelancerProfile(userId) {
   try {
     if (!userId) {
@@ -100,4 +87,45 @@ export async function sendDataToEducation(payload) {
     throw error;
   }
 }
+export async function sendDataToCertificate(payload) {
+  try {
+    console.log("FINAL PAYLOAD:", payload);
 
+    const response = await apiClient.post(
+      "/api/ServiceProvider/add-certificate",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+
+    return response.data;
+
+  } catch (error) {
+    console.log(error.response?.data);
+    throw error;
+  }
+}
+export async function sendDataToExperience(payload) {
+  try {
+    console.log("EXPERIENCE PAYLOAD:", payload);
+
+    const response = await apiClient.post(
+      "/api/ServiceProvider/add-experience",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+
+    return response.data;
+
+  } catch (error) {
+    console.log(error.response?.data);
+    throw error;
+  }
+}

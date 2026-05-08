@@ -117,6 +117,7 @@ const formik = useFormik({
         <h2 className="text-3xl font-semibold mb-6">Edit</h2>
 
         <form onSubmit={formik.handleSubmit}>
+          
 
           {/* Job Title */}
           <div className="mb-6">
@@ -181,9 +182,10 @@ const formik = useFormik({
           {/* Social */}
           <h3 className="text-2xl font-semibold mb-4">Social Media</h3>
 
-          <div className="grid grid-cols-2 gap-6 mb-10">
+ <div className="grid grid-cols-2 gap-6 mb-10">
        {/* Facebook */}
 <div>
+   
   <input
     name="facebookUrl"
     placeholder="https://facebook.com/username"
@@ -195,10 +197,12 @@ const formik = useFormik({
   {formik.touched.facebookUrl && formik.errors.facebookUrl && (
     <p className="text-red-500 text-sm">{formik.errors.facebookUrl}</p>
   )}
+   
 </div>
 
 {/* GitHub */}
 <div>
+  
   <input
     name="githubUrl"
     placeholder="https://github.com/username"
@@ -214,6 +218,7 @@ const formik = useFormik({
 
 {/* LinkedIn */}
 <div>
+    
   <input
     name="linkedInUrl"
     placeholder="https://linkedin.com/in/username"
@@ -229,6 +234,7 @@ const formik = useFormik({
 
 {/* Twitter */}
 <div>
+  
   <input
     name="twitterUrl"
     placeholder="https://twitter.com/username"

@@ -6,9 +6,13 @@ import { useParams } from 'react-router-dom';
 
 import SkillsModification from './../ModalPage/SkillsModification';
 import { getFreelancerProfile } from '../../Services/api-profile';
+import { jwtDecode } from 'jwt-decode';
 
 export default function SkillsSection() {
   const { userId } = useParams();
+  const token = localStorage.getItem("token");
+  
+  const user = token ? jwtDecode(token) : null;
 
   const [skills, setSkills] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,12 +31,14 @@ export default function SkillsSection() {
 
         <h1 className='flex items-center justify-between'>
           <span className='font-bold'>Skills</span>
-
-          <FontAwesomeIcon
-            className='text-xl cursor-pointer'
-            icon={faPenToSquare}
-            onClick={() => setIsModalOpen(true)}
-          />
+{user?.UserId == userId && (
+  <FontAwesomeIcon
+    className='text-xl cursor-pointer'
+    icon={faPenToSquare}
+    onClick={() => setIsModalOpen(true)}
+  />
+)}
+         
         </h1>
 
         <div className='flex flex-wrap gap-2'>

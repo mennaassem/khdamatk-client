@@ -4,9 +4,13 @@ import { getFreelancerProfile } from "../../Services/api-profile";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGraduationCap, faPlus } from "@fortawesome/free-solid-svg-icons";
 import AddEducational from "../ModalPage/AddEducational";
+import { jwtDecode } from "jwt-decode";
 
 export default function EducationSection() {
   const { userId } = useParams();
+   const token = localStorage.getItem("token");
+    
+    const user = token ? jwtDecode(token) : null;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [educationList, setEducationList] = useState([]);
@@ -41,12 +45,15 @@ const handleAddEducation = (newList) => {
         <h1 className="flex items-center justify-between">
           <span className="font-bold">Educational</span>
 
-          <button
+          
+          {user?.UserId == userId && (
+           <button
             className="btn w-fit bg-purple-200"
             onClick={() => setIsModalOpen(true)}
           >
             <FontAwesomeIcon className="text-purple-600" icon={faPlus} />
           </button>
+          )}
         </h1>
 
         {educationList.map((item, index) => (

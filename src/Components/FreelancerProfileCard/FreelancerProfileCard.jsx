@@ -29,7 +29,7 @@ export default function FreelancerProfileCard({ provider }) {
 
        
       <Link 
-to={`/profile/565d8146-aa5c-48cf-b25f-5edf7db61f34`}
+to={`/profile/${provider.id}`}
   className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition"
 >
   View Profile
