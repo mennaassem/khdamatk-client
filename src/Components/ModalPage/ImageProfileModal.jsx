@@ -2,9 +2,9 @@ import React from 'react'
 
 export default function ImageProfileModal({ setShowEditModal }) {
   return (
-<div className="relative top-30 h-screen flex items-center justify-center">
+<div className="fixed mt-3 z-50 flex items-center justify-center">
   
-  <div className="w-[520px] bg-[#f3f3f3] rounded-sm shadow-lg">
+  <div className="bg-white border border-Purple-200 shadow p-5 w-[600px] rounded-2xl">
     
     <div className="p-8">
       <div className="bg-[#dddddd] h-[90px] rounded-sm flex items-center px-6">

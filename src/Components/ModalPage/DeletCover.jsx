@@ -1,8 +1,8 @@
 import React from 'react'
 
-export default function DeletCover() {
+export default function DeletCover({ setShowDelete }) {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/40">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div className="w-[480px] bg-[#f3f3f3] rounded-sm shadow-md">
         
         {/* Content */}
@@ -22,9 +22,9 @@ export default function DeletCover() {
             OK
           </button>
 
-          <button className="text-[28px] text-black hover:opacity-70">
-            Close
-          </button>
+        <button onClick={() => setShowDelete(false)}>
+  Close
+</button>
         </div>
       </div>
     </div>

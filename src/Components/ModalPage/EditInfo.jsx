@@ -111,8 +111,10 @@ const formik = useFormik({
  
 
   return (
-     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-      <div className="w-full max-w-3xl bg-gray-100 h-full overflow-y-auto p-8">
+    //  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    //   <div className="w-full max-w-3xl bg-gray-100 h-full overflow-y-auto p-8">
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+  <div className="w-[95%] h-[95vh] bg-gray-100 overflow-y-auto p-8 rounded-xl">
 
         <h2 className="text-3xl font-semibold mb-6">Edit</h2>
 

@@ -61,7 +61,7 @@ const user = token ? jwtDecode(token) : null;
       
       {/* Profile Info */}
       
-      <div className="relative px-6 pb-6 bg-white">
+      <div className=" relative px-6 pb-6 bg-white">
 
   {/* ايقونه التعديل الخاصة بصفحه EditInfo*/}
   {/* <div className="absolute top-6 right-6">
@@ -83,7 +83,7 @@ const user = token ? jwtDecode(token) : null;
 )}
 
   {/* Profile Content */}
-  <div className="flex items-center justify-between">
+  <div className="flex items-center  justify-between ">
     <ProfileDetails profile={profile} />
   </div>
 

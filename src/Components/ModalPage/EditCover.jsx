@@ -1,8 +1,8 @@
 import React from 'react'
 
-export default function EditCover() {
+export default function EditCover({ setShowEdit }) {
   return (
-     <div className="fixed inset-0 flex items-center justify-center bg-black/40">
+     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div className="w-[500px] bg-[#f3f3f3] rounded-md shadow-lg">
         
         {/* Upload Area */}
@@ -36,9 +36,9 @@ export default function EditCover() {
             Save
           </button>
 
-          <button className="text-black text-[22px] font-medium hover:opacity-70">
-            Close
-          </button>
+        <button onClick={() => setShowEdit(false)}>
+  Close
+</button>
         </div>
       </div>
     </div>

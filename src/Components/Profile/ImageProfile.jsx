@@ -55,9 +55,9 @@ export default function ProfileImage() {
     <>
       <div className="relative w-fit">
         <img
-          src="https://via.placeholder.com/150"
+          src= {logoPhoto}
           alt=""
-          className="rounded-full size-28 object-cover border-4 border-white"
+          className="rounded-full size-36 object-cover border border-purple-600/50"
         />
 
         {/* delete */}
@@ -83,12 +83,10 @@ export default function ProfileImage() {
         </div>
       </div>
 
-     {/* Delete Modal */}
 {showDeleteModal && (
   <DeletImageProfile setShowDeleteModal={setShowDeleteModal} />
 )}
 
-{/* Edit Modal */}
 {showEditModal && (
   <ImageProfileModal setShowEditModal={setShowEditModal} />
 )}

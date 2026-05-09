@@ -1,37 +1,40 @@
- import React from 'react'
+  import React from 'react'
  
 export default function DeletImageProfile({ setShowDeleteModal }) {
    return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center   pt-20">
-      
-      <div className="w-[520px] bg-[#f3f3f3] rounded-sm shadow-lg">
-        
-        <div className="p-8">
-          <div className="bg-[#dddddd] h-[90px] rounded-sm flex items-center px-6">
-            
-            <button className="bg-white px-4 py-2 rounded-md border border-gray-300 flex items-center gap-2">
-              <span>Choose images</span>
-            </button>
+ 
+<div className=" fixed mt-3   z-50 flex items-center justify-center">
+  <div className="bg-white border border-Purple-200 shadow p-5 w-[600px] rounded-2xl">
+    
+    {/* Content */}
+    <div className="  text-center">
+      <h2 className="text-[32px] font-bold text-red-500">
+        Confirm?
+      </h2>
 
-          </div>
-        </div>
-
-        <div className="border-t border-gray-300 px-8 py-5 flex justify-end gap-6">
-          
-          <button className="text-black text-[18px] font-medium">
-            Save
-          </button>
-
-         <button
-  onClick={() => setShowDeleteModal(false)}
-  className="text-[28px] text-black hover:opacity-70"
->
-  Close
-</button>
-
-        </div>
-      </div>
+      <p className="text-[24px] text-black mt-3 whitespace-nowrap">
+        Are you sure that you want to delete the picture?
+      </p>
     </div>
+
+    {/* Footer */}
+    <div className="px-8 pb-6 mt-5 flex justify-end gap-8">
+      <button className="text-[24px] text-black hover:opacity-70">
+        OK
+      </button>
+
+      <button
+        onClick={() => setShowDeleteModal(false)}
+        className="text-[24px] text-black hover:opacity-70"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</div>
+ 
+
+
+
   );
  }
- 
