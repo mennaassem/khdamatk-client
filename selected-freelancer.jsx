@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Star,
   MapPin,
@@ -21,80 +21,64 @@ export default function SelectedFreelancer() {
   const [isSaved, setIsSaved] = useState(false);
   const [showFullBio, setShowFullBio] = useState(false);
   const [selectedTab, setSelectedTab] = useState("skills");
+  const [freelancer, setFreelancer] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const freelancer = {
-    id: 1,
-    name: "أحمد علي محمود",
-    title: "مصمم UI/UX احترافي",
-    location: "القاهرة، مصر",
-    rating: 4.9,
-    reviews: 245,
-    completedProjects: 87,
-    responseTime: "1 ساعة",
-    joinDate: "2020-05-15",
-    hourlyRate: 350,
-    monthlyRate: 8000,
-    availability: "available",
-    skills: [
-      "UI Design",
-      "UX Design",
-      "Figma",
-      "Adobe XD",
-      "Web Design",
-      "Prototyping",
-      "Wireframing",
-      "Design Systems",
-    ],
-    portfolio: [
-      {
-        title: "تطبيق تجارة إلكترونية",
-        image: "🛍️",
-        year: 2025,
-      },
-      {
-        title: "منصة تعليمية",
-        image: "📚",
-        year: 2025,
-      },
-      {
-        title: "تطبيق تواصل اجتماعي",
-        image: "💬",
-        year: 2024,
-      },
-      {
-        title: "لوحة تحكم إدارية",
-        image: "📊",
-        year: 2024,
-      },
-    ],
-    bio: "مصمم UI/UX محترف متخصص في تصميم الواجهات الحديثة والتطبيقات الويب. لدي خبرة أكثر من 6 سنوات في مجال التصميم والعمل مع العملاء من مختلف الدول. أركز على تجربة المستخدم وتصميم التفاعلات البديهية. أعمل بأحدث الأدوات والتقنيات مثل Figma و Adobe XD و Framer.",
-    reviews: [
-      {
-        clientName: "محمد حسن",
-        rating: 5,
-        text: "عمل احترافي جداً. التصاميم رائعة وفي الموعد المحدد.",
-        date: "2026-02-20",
-      },
-      {
-        clientName: "سارة أحمد",
-        rating: 5,
-        text: "مصمم رائع جداً. استمعت لكل ملاحظاتي وقام بالتعديلات بسرعة.",
-        date: "2026-02-10",
-      },
-      {
-        clientName: "علي محمود",
-        rating: 4.9,
-        text: "تصاميم احترافية وتواصل جيد. أنصح به بشدة.",
-        date: "2026-01-30",
-      },
-    ],
-    stats: [
-      { label: "المشاريع المكتملة", value: 87, icon: CheckCircle },
-      { label: "تقييم العملاء", value: "4.9", icon: Star },
-      { label: "وقت الرد", value: "1 ساعة", icon: Clock },
-      { label: "معدل النجاح", value: "98%", icon: TrendingUp },
-    ],
-  };
+  // جلب البيانات من API
+  useEffect(() => {
+    const fetchFreelancer = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch("/api/ServiceProvider/Freelancers");
+        
+        if (!response.ok) {
+          throw new Error(`خطأ: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        // معالجة البيانات المستقبلة
+        const freelancerData = Array.isArray(data) ? data[0] : data;
+        
+        // ملء البيانات المفقودة ببيانات افتراضية إن لزم الأمر
+        setFreelancer({
+          id: freelancerData.id || 1,
+          name: freelancerData.name || "غير محدد",
+          title: freelancerData.title || "محترف",
+          location: freelancerData.location || "غير محدد",
+          rating: freelancerData.rating || 4.5,
+          reviews: freelancerData.reviewCount || 0,
+          completedProjects: freelancerData.completedProjects || 0,
+          responseTime: freelancerData.responseTime || "غير محدد",
+          joinDate: freelancerData.joinDate || new Date().toISOString(),
+          hourlyRate: freelancerData.hourlyRate || 0,
+          monthlyRate: freelancerData.monthlyRate || 0,
+          availability: freelancerData.availability || "available",
+          skills: freelancerData.skills || [],
+          portfolio: freelancerData.portfolio || [],
+          bio: freelancerData.bio || "لا توجد نبذة متاحة",
+          reviews: freelancerData.reviews || [],
+          stats: [
+            { label: "المشاريع المكتملة", value: freelancerData.completedProjects || 0, icon: CheckCircle },
+            { label: "تقييم العملاء", value: freelancerData.rating || 0, icon: Star },
+            { label: "وقت الرد", value: freelancerData.responseTime || "غير محدد", icon: Clock },
+            { label: "معدل النجاح", value: freelancerData.successRate || "0%", icon: TrendingUp },
+          ],
+        });
+        
+        setError(null);
+      } catch (err) {
+        console.error("خطأ في جلب البيانات:", err);
+        setError(err.message);
+        setFreelancer(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFreelancer();
+  }, []);
 
   return (
     <div dir="rtl" className="bg-gray-100 min-h-screen font-sans">
@@ -111,6 +95,33 @@ export default function SelectedFreelancer() {
 
       {/* Main Content */}
       <div className="max-w-5xl mx-auto p-4 py-8">
+        {/* Loading State */}
+        {loading && (
+          <div className="bg-white rounded-xl shadow p-8 text-center">
+            <div className="inline-block">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-700"></div>
+            </div>
+            <p className="text-gray-600 mt-4 font-semibold">جاري تحميل البيانات...</p>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-xl shadow p-6 mb-6">
+            <p className="text-red-800 font-semibold mb-2">حدث خطأ</p>
+            <p className="text-red-700">{error}</p>
+            <button 
+              onClick={() => window.location.reload()}
+              className="mt-4 px-4 py-2 bg-red-700 text-white rounded-lg hover:bg-red-800"
+            >
+              إعادة محاولة
+            </button>
+          </div>
+        )}
+
+        {/* Success State - Show content only when freelancer data is loaded */}
+        {!loading && !error && freelancer && (
+          <>
         {/* Profile Header */}
         <div className="bg-white rounded-xl shadow p-8 mb-6">
           <div className="flex items-start gap-6 mb-6">
@@ -317,6 +328,15 @@ export default function SelectedFreelancer() {
             </button>
           </div>
         </div>
+          </>
+        )}
+
+        {/* No Data State */}
+        {!loading && !error && !freelancer && (
+          <div className="bg-yellow-50 border border-yellow-200 rounded-xl shadow p-8 text-center">
+            <p className="text-yellow-800 font-semibold">لم يتم العثور على بيانات</p>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Send,
   Search,
@@ -10,148 +10,97 @@ import {
   Paperclip,
   Mic,
 } from "lucide-react";
+import { mockApiHandler } from "./src/mockApi";
 
 export default function MessagesPage() {
   const [selectedChat, setSelectedChat] = useState(1);
   const [messageText, setMessageText] = useState("");
-  const [messages, setMessages] = useState({
-    1: [
-      {
-        id: 1,
-        sender: "أحمد علي",
-        text: "مرحبا، هل أنت متاح لمشروع تصميم واجهة؟",
-        time: "10:30",
-        sent: false,
-      },
-      {
-        id: 2,
-        sender: "أنت",
-        text: "أهلا وسهلا! نعم أنا متاح. كم تتوقع مدة المشروع؟",
-        time: "10:35",
-        sent: true,
-      },
-      {
-        id: 3,
-        sender: "أحمد علي",
-        text: "حوالي 3 إلى 4 أسابيع. هل هذا مناسب لك؟",
-        time: "10:37",
-        sent: false,
-      },
-    ],
-    2: [
-      {
-        id: 1,
-        sender: "منى حسن",
-        text: "أنا مهتمة بخدماتك في كتابة المحتوى",
-        time: "09:15",
-        sent: false,
-      },
-      {
-        id: 2,
-        sender: "أنت",
-        text: "شكراً لاهتمامك! ما نوع المحتوى الذي تحتاجه؟",
-        time: "09:20",
-        sent: true,
-      },
-    ],
-    3: [
-      {
-        id: 1,
-        sender: "علي محمود",
-        text: "هل يمكنك مساعدتي في تطوير تطبيق؟",
-        time: "08:45",
-        sent: false,
-      },
-      {
-        id: 2,
-        sender: "أنت",
-        text: "بكل تأكيد! أخبرني عن المتطلبات",
-        time: "08:50",
-        sent: true,
-      },
-      {
-        id: 3,
-        sender: "علي محمود",
-        text: "تطبيق إدارة المشاريع للفريق",
-        time: "08:55",
-        sent: false,
-      },
-    ],
-  });
+  const [chats, setChats] = useState([]);
+  const [messages, setMessages] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const chats = [
-    {
-      id: 1,
-      name: "أحمد علي",
-      lastMessage: "حوالي 3 إلى 4 أسابيع. هل هذا مناسب لك؟",
-      time: "10:37",
-      avatar: "🧑",
-      unread: 0,
-      online: true,
-    },
-    {
-      id: 2,
-      name: "منى حسن",
-      lastMessage: "شكراً لاهتمامك! ما نوع المحتوى الذي تحتاجه؟",
-      time: "09:20",
-      avatar: "👩",
-      unread: 2,
-      online: false,
-    },
-    {
-      id: 3,
-      name: "علي محمود",
-      lastMessage: "تطبيق إدارة المشاريع للفريق",
-      time: "08:55",
-      avatar: "🧑",
-      unread: 1,
-      online: true,
-    },
-    {
-      id: 4,
-      name: "سارة محمد",
-      lastMessage: "شكراً على الاهتمام بالمشروع",
-      time: "07:30",
-      avatar: "👩",
-      unread: 0,
-      online: false,
-    },
-    {
-      id: 5,
-      name: "محمد أحمد",
-      lastMessage: "هل انتهيت من التصميمات؟",
-      time: "06:15",
-      avatar: "🧑",
-      unread: 0,
-      online: true,
-    },
-  ];
+  // Load conversations on component mount
+  useEffect(() => {
+    const loadConversations = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        // Get all conversations
+        const conversationsResult = await mockApiHandler.getConversations();
+        const conversationsData = conversationsResult.data;
+        setChats(conversationsData);
+
+        // Load messages for each conversation
+        const messagesData = {};
+        for (const chat of conversationsData) {
+          try {
+            const messagesResult = await mockApiHandler.getConversationMessages(chat.id);
+            messagesData[chat.id] = messagesResult.data.messages;
+          } catch (err) {
+            console.error(`Error loading messages for conversation ${chat.id}:`, err);
+          }
+        }
+        setMessages(messagesData);
+      } catch (err) {
+        setError(err.message || "حدث خطأ في تحميل المحادثات");
+        console.error("Error loading conversations:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadConversations();
+  }, []);
+
+  // Load conversation details when selected chat changes
+  useEffect(() => {
+    if (selectedChat) {
+      const loadConversationMessages = async () => {
+        try {
+          const result = await mockApiHandler.getConversationById(selectedChat);
+          console.log("✅ Conversation loaded successfully:", result);
+        } catch (err) {
+          console.error("❌ Error loading conversation:", err);
+          setError(err.message || "خطأ في تحميل المحادثة");
+        }
+      };
+
+      loadConversationMessages();
+    }
+  }, [selectedChat]);
 
   const currentChat = chats.find((c) => c.id === selectedChat);
   const currentMessages = messages[selectedChat] || [];
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (messageText.trim() === "") {
-      alert("الرجاء كتابة رسالة قبل الإرسال");
+      setError("الرجاء كتابة رسالة قبل الإرسال");
       return;
     }
     
-    const newMessage = {
-      id: currentMessages.length + 1,
-      sender: "أنت",
-      text: messageText,
-      time: new Date().toLocaleTimeString("ar-EG", {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      sent: true,
-    };
+    try {
+      // Send message via API
+      const result = await mockApiHandler.sendMessage(selectedChat, {
+        sender: "أنت",
+        text: messageText,
+        sent: true,
+      });
 
-    setMessages({
-      ...messages,
-      [selectedChat]: [...currentMessages, newMessage],
-    });
-    setMessageText("");
+      console.log("✅ Message sent successfully:", result);
+
+      // Update local state
+      setMessages({
+        ...messages,
+        [selectedChat]: [...(messages[selectedChat] || []), result.data],
+      });
+      setMessageText("");
+      setError(null);
+    } catch (err) {
+      console.error("❌ Error sending message:", err);
+      setError(err.message || "فشل في إرسال الرسالة");
+    }
   };
 
   return (
@@ -189,8 +138,23 @@ export default function MessagesPage() {
         </div>
       </header>
 
+      {/* Error Message */}
+      {error && (
+        <div className="bg-red-50 border-b border-red-200 px-4 py-3">
+          <p className="text-sm text-red-700">{error}</p>
+        </div>
+      )}
+
       {/* Main Chat Container */}
-      <div className="flex flex-1 overflow-hidden">
+      {loading ? (
+        <div className="flex items-center justify-center flex-1">
+          <div className="text-center">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-purple-700"></div>
+            <p className="text-gray-600 mt-4">جاري تحميل المحادثات...</p>
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-1 overflow-hidden">
         {/* Sidebar - Chat List */}
         <div className="w-80 border-l bg-gray-50 flex flex-col">
           {/* Search */}
@@ -361,7 +325,7 @@ export default function MessagesPage() {
             </div>
           )}
         </div>
-      </div>
+      )}
     </div>
   );
 }
