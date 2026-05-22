@@ -29,16 +29,7 @@ async function fetchDataToProfileDetails() {
   }
 }
 
-// useEffect(() => {
-//   fetchDataToProfileDetails();
-// }, []);
-// useEffect(() => {
-//   fetchDataToProfileDetails();
-// }, [userId]);
  
-//  if (loading || !profile) {
-//   return <ProfileDetailsSkeleton />;
-// }
 if (!profile) return <ProfileDetailsSkeleton />;
 function formatUrl(url) {
   if (!url) return "#";
@@ -47,23 +38,23 @@ function formatUrl(url) {
   }
   return "https://" + url;
 }
-// console.log("PROFILE:", profile);
+ 
 
   return (
     <div className="pt-14">
       
       {/* Name */}
-      <h2 className="text-xl font-semibold">
-        {profile.fullName}
+      <h2 className="text-3xl font-bold text-gray-900">
+        {profile.name}
       </h2>
 
       {/* Job Title */}
-      <p className="text-gray-600 text-sm mt-1">
+      <p className="text-gray-500 text-lg mt-1">
         {profile.jobTitle}
       </p>
 
       {/* Rating + Hourly Rate */}
-      <div className="flex items-center gap-3 text-sm mt-2">
+      <div className="flex flex-col  gap-3 text-sm mt-2">
 
         {/* Stars */}
         <div className="flex items-center gap-1 text-yellow-400">
@@ -75,25 +66,29 @@ function formatUrl(url) {
           </span>
         </div>
 
-        {/* Hourly Rate */}
-        <span className="font-semibold text-black">
-          ${profile.hourlyRate}/hr
+         {/* Hourly Rate */}
+        <span className="font-semibold text-lg">
+          {profile.hourlyRate}/hr $
         </span>
       </div>
+       
 
       {/* Location */}
-      <div className="flex items-center gap-2 text-sm text-gray-600 mt-2">
+      <div className="text-gray-500 mt-2">
         <FontAwesomeIcon icon={faLocationDot} />
         <span>{profile.location}</span>
       </div>
 
       {/* Member since */}
-      <p className="text-xs text-gray-400 mt-1">
+      <p className="text-gray-400 text-sm mt-1">
         Member since {profile.memberSince}
       </p>
 
       {/* Bio */}
       <p className="text-sm text-gray-700 mt-3">
+        {profile.availability}
+      </p>
+       <p className="mt-4 text-gray-700 leading-8 text-[17px]">
         {profile.bio}
       </p>
       {/* Social Media */}
