@@ -101,7 +101,7 @@ function App() {
   element: <Job/>
 },
  {
-  path: "job-details",
+  path: "job-details/:id",
   element: <JobDetails/>
 },
 {
