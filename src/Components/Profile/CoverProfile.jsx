@@ -14,7 +14,7 @@ export default function CoverProfile() {
   return (
     <>
       <div className="relative">
-        <img src={logoPhoto} className=" size-fit object-cover" />
+        {/* <img src={logoPhoto} className=" size-fit object-cover" /> */}
 
         {/* delete */}
         <button
