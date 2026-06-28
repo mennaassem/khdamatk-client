@@ -14,29 +14,7 @@
 //           type="text"
 //           placeholder="Title"
 //           className="w-full border-b mb-6 outline-none py-2"
-//         />
-
-//         {/* Textarea */}
-//         <textarea
-//           placeholder="description"
-//           className="w-full h-28 bg-gray-100 p-3 mb-6 outline-none resize-none"
-//         />
-
-//         {/* Buttons */}
-//         <div className="flex justify-end gap-6">
-//           <button className="font-medium">
-//             Save
-//           </button>
-
-//           <button className="text-gray-500">
-//             Close
-//           </button>
-//         </div>
-
-//       </div>
-//     </div>
-//   );
-// }
+//  
  
 import React, { useState } from 'react'
 import { sendDataToExperience } from '../../Services/api-profile'

@@ -28,9 +28,13 @@ import { apiClient } from "./api-client"
                 method:"POST",
                 url:`/Auth/Register`,
                 data:{
-                    userName:values.userName,
-                    email:values.email,
-                    password:values.password
+                      userName: values.userName,
+                email: values.email,
+                password: values.password,
+                phoneNumber: values.phoneNumber,
+                bio: values.bio,
+                jobTitle: values.jobTitle,
+                isServiceProvider: values.isServiceProvider
                 }
             }
             const {data}= await apiClient.request(optain)

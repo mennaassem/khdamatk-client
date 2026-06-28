@@ -13,6 +13,7 @@ import { API_CONFIG} from '../../Config'
 import { sendDataToLogin } from '../../Services/auth-services'
 import { useContext } from 'react'
 import { AuthContext } from '../../Components/Context/AuthContext'
+ import { jwtDecode } from "jwt-decode";
 
 export default function Login() {
     const location=useLocation()
@@ -25,47 +26,65 @@ export default function Login() {
      const [isExistErrorEmail, setIsExistErrorEmail]=useState(null)
      const [isShownPassword,setIsShownPassword]=useState(false)
     const regexpassword=/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/
-     
+
 
     const  validationSchema= yup.object({
- 
+
        email: yup.string().email("Invalid email address").required("Email is required"),
        password: yup.string().min(8, "Password must be at least 8 characters").required("Password is required").matches(regexpassword,"Password must have eight characters, at least one upper case English letter, one lower case English letter, one number and one special character"),
-       
-    })
-     async function handleLogin(values){
-        
-        try {
-             
-             
-            const response= await sendDataToLogin(values)
-            console.log(response)
-            if(response.isSuccess){
-                toast("ًWelcome Back")
-                localStorage.setItem("token",response.data.jwtToken.token)
-                setToken(response.data.jwtToken.token)
 
-                setTimeout(()=>{
-                    navigate(from)
-                },3000)
-                
-                
+    })
+   
+
+// async function handleLogin(values) {
+//     try {
+//         const response = await sendDataToLogin(values);
+
+//         if(response.isSuccess){
+//             const token = response.data.jwtToken.token;
+
+//             localStorage.setItem("token", token);
+//             setToken(token);
+
+//             const decoded = jwtDecode(token);
+
+//             console.log(decoded); // مهم جدًا
+
+//             toast("Welcome Back");
+//         }
+
+//     } catch (error) {
+//         console.log(error);
+//     }
+// }
+async function handleLogin(values) {
+    try {
+        const response = await sendDataToLogin(values);
+
+        if (response.isSuccess) {
+            const token = response.data.jwtToken.token;
+
+            localStorage.setItem("token", token);
+            setToken(token);
+
+            const decoded = jwtDecode(token);
+
+            console.log(decoded);
+
+            toast("Welcome Back");
+
+            // 👇 هنا المهم
+            if (decoded.IsServiceProvider) {
+                navigate("/profile");
+            } else {
+                navigate("/client");
             }
-        } catch (error) {
-              console.log(error);
-              if(error.response.data.errors[0].title === "InvalidPassword"){
-                 setIsExistError(error.response.data.errors[0].message)
-                 setIsExistErrorEmail(null)
-                  
-                 
-              }
-               
-          else if(error.response.data.errors[0].title === "UserNotFound"){
-            setIsExistErrorEmail(error.response.data.errors[0].message)
-            setIsExistError(null)
-          }
-        }   
+        }
+
+    } catch (error) {
+        console.log(error);
     }
+}
     const formik=useFormik({
         initialValues:{
             email: '',
@@ -86,14 +105,14 @@ export default function Login() {
     }
   return (
 <>
-<div className='pt-20 lg:pt-0'>
+<div className="bg-white dark:bg-gray-900 text-black dark:text-dark min-h-screen transition-colors duration-300">
     <div className="container items-center justify-between gap-16 grid lg:grid-cols-2">
         {/* Left side: Login form and text content */}
         <div className=' p-8 bg-white shadow-lg'>
             {/* Title & description */}
              <div className="Title space-y-2">
                 <h1 className=' font-bold text-2xl'>Login</h1>
-            <p className='text-gray-400/70'>Login to access your travelwise  account</p>
+            <p className='text-dark-400/70'>Login to access your travelwise  account</p>
              </div>
              {/* Login form  */}
              <div>
@@ -106,9 +125,9 @@ export default function Login() {
                             {formik.touched.email && formik.errors.email &&(<p className='text-red-500 text-sm mt-1'>{formik.errors.email}</p>)}
                             {isExistErrorEmail && (<p className='text-red-500'>{isExistErrorEmail}</p>)}
 
-                        
+
                            </div>
-                            
+
                          </div>
                            {/* Password field */} 
                            <div className='relative'>
@@ -138,14 +157,14 @@ export default function Login() {
                 {/* ------------------------OR------------------------------ */}
                 <div className='text-center relative m-9'>
                     <div className='w-full h-0.5 border border-gray-300'></div>
-                    <p className='text-gray-400 text-sm absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white px-2'>Or login with</p>
+                    <p className='text-dark-400 text-sm absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white px-2'>Or login with</p>
                 </div>
                 {/* Social media login buttons */}
                 <div>
                     <SocialButtons/>
                 </div>
              </div>
-        
+
         </div>
         {/* Right side: Illustration image for the login page */}
         <div>
@@ -153,15 +172,6 @@ export default function Login() {
         </div>
     </div>
 </div>
-
-
-
-
-
-
-
-
-
 
 </>
   )

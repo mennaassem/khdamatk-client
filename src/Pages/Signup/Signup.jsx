@@ -31,39 +31,75 @@ export default function Signup() {
        terms:yup.boolean().oneOf([true],"You must accept the terms and conditions")
        
     })
-     async function handleSignUp(values){ 
+     async function handleSignUp(values){
+        
+        // try {
+            
+        //     const response= await sendDataToSignup(values)
+        //     if(response.isSuccess){
+        //         toast("Account created! Please check your email to confirm.")
+        //         setTimeout(()=>{
+        //             navigate('/login')
+        //         },3000)
+                
+                
+        //     }
+        // } catch (error) {
+            // if(error.response.data.errors[0].title === "DuplicateUserName"){
+            //     setUsernameError(error.response.data.errors[0].message)
+
+            // }
+            // console.log(error)
+            // setIsExistError(error.response.data.message)
+      
+        // }   
         try {
   const response = await sendDataToSignup(values);
   if (response.isSuccess) {
-    localStorage.setItem("email", values.email);
-    localStorage.setItem("password", values.password);
     toast("Account created! Please check your email to confirm.");
     setTimeout(() => {
       navigate('/send-confirm-email');
     }, 3000);
   }
-} catch (error) {
-  if (error.response.data.errors[0].title === "DuplicateUserName") {
-    setUsernameError(error.response.data.errors[0].message);
-    setIsExistError(''); 
-  } else {
-    console.log(error);
-    setIsExistError(error.response.data.message);
-    setUsernameError(''); 
-  }
+} 
+// catch (error) {
+//   if (error.response.data.errors[0].title === "DuplicateUserName") {
+//     setUsernameError(error.response.data.errors[0].message);
+//     setIsExistError(''); 
+//   } else {
+//     console.log(error);
+//     setIsExistError(error.response.data.message);
+//     setUsernameError(''); 
+//   }
+// }
+catch (error) {
+   console.log(error.response.data);
+  console.log(error.response.data.errors);
+  console.log("Full Error:", error);
+  console.log("Response Data:", error.response?.data);
+
+  setUsernameError("");
+  setIsExistError(
+    error.response?.data?.message ||
+    error.response?.data?.title ||
+    "Something went wrong"
+  );
 }
     }
     const formik=useFormik({
-        initialValues:{
-            userName: '',
-            lastName:'',
-            email: '',
-            password: '',
-            rePassword:'',
-            phone:'',
-            terms: false
+initialValues:{
+    userName:'',
+    email:'',
+    password:'',
+    rePassword:'',
+    phoneNumber:'',
+    bio:'',
+    jobTitle:'',
+    isServiceProvider:false,
+    terms:false
+},
 
-        },
+        
         validationSchema,
         onSubmit:handleSignUp
     })
@@ -80,7 +116,7 @@ export default function Signup() {
     }
   return (
 <>
-<div className='pt-20 lg:pt-0'>
+<div className="bg-white dark:bg-gray-900 text-black dark:text-dark min-h-screen transition-colors duration-300">
     <div className="container items-center justify-between gap-16 grid lg:grid-cols-2">
         {/* Left side: Sign up form and text content */}
         <div className=' p-8 bg-white shadow-lg'>
@@ -124,6 +160,41 @@ export default function Signup() {
                            </div>
                          </div>
 
+       {/* job-title */}
+                               <div className='relative mb-5 mt-5'>
+    <span className='absolute left-4 -top-3 bg-white px-2 text-sm text-gray-500'>
+        Job Title
+    </span>
+
+    <input
+        type='text'
+        className='form-control'
+        name='jobTitle'
+        value={formik.values.jobTitle}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+    />
+</div>
+{/* bio */}
+<div className='relative'>
+    <span className='absolute left-4 -top-3 bg-white px-2 text-sm text-gray-500'>
+        Bio
+    </span>
+
+    <textarea
+        className='form-control'
+        rows="4"
+        name='bio'
+        value={formik.values.bio}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+    />
+</div>
+ 
+
+
+
+
                              <div className='relative'>
                         <span className='bg-white px-2  absolute left-4 -top-3 text-sm text-gray-500'>Password</span>
                             <input  type={isShownPassword ? "text" : "password"} className='form-control' name='password' value={formik.values.password} onChange={formik.handleChange} onBlur={formik.handleBlur}/>
@@ -143,6 +214,7 @@ export default function Signup() {
                             </button>
                            </div>
                                {formik.touched.rePassword && formik.errors.rePassword &&(<p className='text-red-500 text-sm'>{formik.errors.rePassword}</p>)}
+                         
                               {/* terms and conditions */}
                              <div>
                                 <div className='flex gap-2'>
@@ -152,6 +224,37 @@ export default function Signup() {
                                {formik.touched.terms && formik.errors.terms &&(<p className='text-red-500 text-sm'>{formik.errors.terms}</p>)}
 
                              </div>
+                                                            {/* choose */}
+                               <div className='space-y-2'>
+    <label className='font-bold'>Account Type</label>
+
+    <div className='flex gap-6 mt-2'>
+        <label className='flex items-center gap-2 cursor-pointer'>
+            <input
+                type="radio"
+                name="isServiceProvider"
+                checked={formik.values.isServiceProvider === false}
+                onChange={() =>
+                    formik.setFieldValue("isServiceProvider", false)
+                }
+            />
+            <span>Client</span>
+        </label>
+
+        <label className='flex items-center gap-2 cursor-pointer'>
+            <input
+                type="radio"
+                name="isServiceProvider"
+                checked={formik.values.isServiceProvider === true}
+                onChange={() =>
+                    formik.setFieldValue("isServiceProvider", true)
+                }
+            />
+            <span>Service Provider</span>
+        </label>
+    </div>
+</div>
+
                              </div>
                              
                                 {/* Submit button */}

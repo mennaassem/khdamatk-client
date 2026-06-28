@@ -5,11 +5,14 @@ import React, { useContext, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom';
 import { AuthContext } from './../Context/AuthContext';
 import { ThemeContext } from '../Context/Theme.Context';
+import { jwtDecode } from 'jwt-decode';
 
 export default function Navbar() {
   const {theme,toggleTheme}=useContext(ThemeContext)
   const[isMenueOpen,setIsMenueOpen]=useState(false)
   const {logOut}=useContext(AuthContext)
+  const token = localStorage.getItem("token");
+const user = token ? jwtDecode(token) : null;
   function openMenue(){
     setIsMenueOpen(! isMenueOpen)
   }
@@ -47,12 +50,18 @@ export default function Navbar() {
    
     <ul className='divide-y divide-gray-200 text-sm'>
   <li>
-    <Link 
+    {/* <Link 
       to="/profile" 
       className='block w-full px-4 py-2 hover:bg-gray-100'
     >
       Profile
-    </Link>
+    </Link> */}
+    <Link
+  to={`/profile/${user?.UserId}`}
+  className="block w-full px-4 py-2 hover:bg-gray-100"
+>
+  Profile
+</Link>
   </li>
 
   <li>
