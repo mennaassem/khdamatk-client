@@ -31,7 +31,7 @@ const user = token ? jwtDecode(token) : null;
                 </button>
                 
                 <Link to="/about">About</Link>
-                <Link to="job">Job</Link>
+                <Link  to="/job">Job</Link>
               </div >
               <div className='hidden lg:flex items-center gap-8 text-2xl'>
                 <FontAwesomeIcon icon={faMessage} />

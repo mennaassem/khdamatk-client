@@ -129,7 +129,7 @@ export default function PostJop() {
         <div className="bg-white dark:bg-gray-900 text-black dark:text-white min-h-screen transition-colors duration-300">
 
             {/* Black Banner */}
-            <div className=" mt-16 bg-purple-900 text-white text-center p-10 text-3xl font-medium">
+            <div className="bg-black text-white text-center p-10 text-3xl font-medium">
                 Post your jobs for free to receive professional proposals Now!
             </div>
 
@@ -299,6 +299,6 @@ export default function PostJop() {
 
                 </div>
             </div>
-        </div>
-    );
+</div>
+        );
 }

@@ -21,6 +21,17 @@ import omnia from '../../assets/Images/omnia.jpeg'
 import sousefsamir from '../../assets/Images/sousefsamir.jpeg'
 import mohamedreda from '../../assets/Images/mohamed reda.jpeg'
 import yomna from '../../assets/Images/yomna mohamed.jpeg'
+import Gouda from '../../assets/Images/Gouda.jpeg'
+ 
+import HessianMostafa from '../../assets/Images/Hessian Mostafa.jpeg'
+ 
+import Zainab  from '../../assets/Images/Zainab Salah.jpeg'
+ 
+ import Ahmed from '../../assets/Images/Ahmed Mahmoud.jpeg'
+ import  YoussefAshra from '../../assets/Images/Youssef Ashraf.jpeg'
+ import  Youssef from '../../assets/Images/Youssef.jpeg'
+ import about from '../../assets/Images/about.jpeg'
+  
  
  
 
@@ -85,24 +96,34 @@ export default function About() {
       image: yomna,
     },
       {
-      name: "Team Member",
-      role: "Project Manager",
-      image: "https://randomuser.me/api/portraits/men/45.jpg",
+      name: "Gouda George",
+      role: "Backend .NET Developer",
+      image: Gouda,
     },
       {
-      name: "Team Member",
-      role: "Project Manager",
-      image: "https://randomuser.me/api/portraits/men/45.jpg",
+      name: "Hessian Mostafa",
+      role: "Mobile Application Developer",
+      image:  HessianMostafa,
     },
       {
-      name: "Team Member",
-      role: "Project Manager",
-      image: "https://randomuser.me/api/portraits/men/45.jpg",
+      name: "Zainab Salah",
+      role: "Ui &UX design",
+      image:  Zainab ,
     },
       {
-      name: "Team Member",
-      role: "Project Manager",
-      image: "https://randomuser.me/api/portraits/men/45.jpg",
+      name: "Ahmed Mahmoud",
+      role: "Frontend Developer | React.js |",
+      image:  Ahmed,
+    },
+        {
+      name: "Youssef Ashra",
+      role: ".net developer",
+      image:  YoussefAshra,
+    },
+        {
+      name: "Youssef Nabil",
+      role: "Front end developer and Ui&ux design",
+      image:   Youssef,
     },
     
   ];
@@ -111,7 +132,7 @@ export default function About() {
     <div className="bg-gray-50 min-h-screen">
 
       {/* Hero Section */}
-      <section className="container mx-auto px-6 ">
+      <section className="container mx-auto px-6  py-36">
         <div className="grid md:grid-cols-2 gap-12 items-center">
 
           <div>
@@ -127,14 +148,14 @@ export default function About() {
             KhadmaHub is a digital freelance marketplace that connects clients with skilled freelancers in one trusted platform. It helps users find professional services easily while enabling freelancers to showcase their skills, manage projects, and grow their careers through a secure and user-friendly experience.
             </p>
 
-            <button className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-xl transition duration-300">
+            {/* <button className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-xl transition duration-300">
               Explore Services
-            </button>
+            </button> */}
           </div>
 
           <div>
             <img
-              src= {logoPhoto}
+              src= {about}
               alt="About Khdamatk"
               className="size-fit"
             />

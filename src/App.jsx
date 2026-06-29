@@ -15,7 +15,7 @@ import ConfirmEmail from './Pages/ConfirmEmail/ConfirmEmail';
 import AuthProvider from './Components/Context/AuthContext';
 import Profile from './Pages/Profile/Profile';
 import ProtectedRout from './Components/ProtectedRout/ProtectedRout';
-import Job from './Pages/Job/Job';
+ 
 import ThemeProvider from './Components/Context/Theme.Context';
 
  
@@ -39,6 +39,8 @@ import PostJob from '../Pages/PostJob/PostJob';
 import EmbtyDasheBoord from '../Pages/EmbtyDasheBoord/EmbtyDasheBoord';
 import Wallet from '../Pages/Wallet/Wallet';
 import About from './Pages/About/About';
+import Verification from '../Pages/Verification/Verification';
+import Job from '../Pages/Job/Job';
  
  
  
@@ -96,6 +98,12 @@ function App() {
     <PostJob/>
   </ProtectedRout>
 },
+{ 
+  path: "git-job",
+  element:  <ProtectedRout>
+    <GitJob/>
+  </ProtectedRout> 
+},
  {
   path:"profile/:userId",
   element:  
@@ -108,13 +116,15 @@ function App() {
   element: <Client/>
 },
  
-   {
-  path: "job",
-  element: <Job/>
-},
+ 
    {
   path: "wallet",
   element: <Wallet/>
+},
+
+   {
+  path: "job",
+  element:<Job/>
 },
    {
   path: "about",
@@ -144,10 +154,7 @@ function App() {
   path: "report-details",
   element: <ReportDetails/>
 },
-{
-  path: "git-job",
-  element: <GitJob/>
-},
+ 
 {
   path: "service",
   element: <Service/>
@@ -166,7 +173,12 @@ function App() {
      {
 path: "servicespage",
 element: <ServicesPage/>
+},  
+     {
+path: "verification",
+element: <Verification/>
 },          
+         
            {
 path: "clientproplist",
 element: <ClientPropList/>

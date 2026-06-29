@@ -53,7 +53,7 @@ import { useNavigate } from 'react-router-dom';
     </div>
      {/* Verification */}
         <div
-      onClick={() => navigate("/my-jobs")}
+      onClick={() => navigate("/verification")}
       className="w-28 h-28 bg-white border border-gray-200 rounded-xl shadow-md flex flex-col items-center justify-center gap-2 hover:shadow-xl transition cursor-pointer"
     >
       
@@ -63,7 +63,7 @@ import { useNavigate } from 'react-router-dom';
       </div>
 
       {/* Text */}
-      <p className="text-sm font-bold text-gray-700">My Jobs</p>
+      <p className="text-sm font-bold text-gray-700">Verification</p>
     </div>
      </div>
      
