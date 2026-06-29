@@ -58,12 +58,14 @@ transition-colors duration-300">
         Post job
       </Link>
 
-      <button className="btn w-fit 
+      <Link 
+      to={`/git-job`}
+       className="btn w-fit 
       bg-amber-500 hover:bg-amber-600
       dark:bg-amber-400 dark:hover:bg-amber-300
       text-white transition">
         Get A job
-      </button>
+      </Link>
 
     </div>
   </div>

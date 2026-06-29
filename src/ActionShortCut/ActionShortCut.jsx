@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
    return (
      <>
      
-     <div className="container bg-white mb-5 flex items-center justify-center gap-3">
+     <div className="container border-t py-5 bg-white mb-5 flex items-center justify-center gap-3">
         {/* EmbtyDasheBoord */}
        <div
       onClick={() => navigate("/emptydashboard")}

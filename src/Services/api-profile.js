@@ -37,6 +37,8 @@ export async function getFreelancerProfile(userId) {
         jobTitle: values.jobTitle,
         linkedInUrl: values.linkedInUrl || null,
         twitterUrl: values.twitterUrl || null,
+         profileImageUrl: values.profileImageUrl || null,
+        coverImageUrl: values.coverImageUrl || null,
       },
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`, // 👈 هنا التوكن

@@ -38,6 +38,7 @@ import Client from './Pages/Client/Client';
 import PostJob from '../Pages/PostJob/PostJob';
 import EmbtyDasheBoord from '../Pages/EmbtyDasheBoord/EmbtyDasheBoord';
 import Wallet from '../Pages/Wallet/Wallet';
+import About from './Pages/About/About';
  
  
  
@@ -114,6 +115,10 @@ function App() {
    {
   path: "wallet",
   element: <Wallet/>
+},
+   {
+  path: "about",
+  element:  <About/>
 },
    {
   path: "emptydashboard",

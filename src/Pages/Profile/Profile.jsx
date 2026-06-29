@@ -12,7 +12,7 @@ import ProfileHeader from './../../Components/Profile/ProfileHeader';
 export default function Profile() {
   return (
       <>
-      <div className="container bg-gray-100 ">
+      <div className="container  ">
         <ProfileHeader/>
          
         <ActionShortCut/>
