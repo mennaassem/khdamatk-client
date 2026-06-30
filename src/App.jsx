@@ -11,11 +11,11 @@ import Home from './Pages/Home/Home';
 import NotFound from './Pages/NotFound/NotFound';
 import SendConfirmEmail from './Pages/SendConfirmEmail/SendConfirmEmail';
 import ConfirmEmail from './Pages/ConfirmEmail/ConfirmEmail';
-import PostJop from './Pages/PostJop/PostJop';
+ 
 import AuthProvider from './Components/Context/AuthContext';
 import Profile from './Pages/Profile/Profile';
 import ProtectedRout from './Components/ProtectedRout/ProtectedRout';
-import Job from './Pages/Job/Job';
+ 
 import ThemeProvider from './Components/Context/Theme.Context';
 
  
@@ -29,12 +29,19 @@ import SendProposal from './Pages/SendProposal/SendProposal';
 import Service from './Pages/Service/Service';
 import FindFreelancersPage from './Pages/FindFreelancersPage/FindFreelancersPage';
 import ProvidersProvider from './Components/Context/ProvidersContext';
-import EmptyDashboard from './../Pages/EmptyDashboard/EmptyDashboard';
+ 
 import ServicesPage from '../Pages/ServicesPage/ServicesPage';
 import ClientPropList from '../Pages/ClientPropList/ClientPropList';
 import MessagePage from './Pages/MessagePage/MessagePage';
 import ServiceDetails from '../Pages/ServiceDetails/ServiceDetails';
 import SelectedFreeLancer from '../Pages/SelectedFreeLancer/SelectedFreeLancer';
+import Client from './Pages/Client/Client';
+import PostJob from '../Pages/PostJob/PostJob';
+import EmbtyDasheBoord from '../Pages/EmbtyDasheBoord/EmbtyDasheBoord';
+import Wallet from '../Pages/Wallet/Wallet';
+import About from './Pages/About/About';
+import Verification from '../Pages/Verification/Verification';
+import Job from '../Pages/Job/Job';
  
  
  
@@ -80,10 +87,16 @@ function App() {
   element: <ConfirmEmail/>
 }, 
               {
-  path: "post-jop",
+  path: "postjob",
   element: <ProtectedRout>
-    <PostJop/>
+    <PostJob/>
   </ProtectedRout>
+},
+{ 
+  path: "git-job",
+  element:  <ProtectedRout>
+    <GitJob/>
+  </ProtectedRout> 
 },
  {
   path:"profile/:userId",
@@ -91,12 +104,36 @@ function App() {
     <Profile/>
    
 },
+
+   {
+  path: "client",
+  element: <Client/>
+},
+ 
+ 
+   {
+  path: "wallet",
+  element: <Wallet/>
+},
+
    {
   path: "job",
-  element: <Job/>
+  element:<Job/>
 },
+   {
+  path: "about",
+  element:  <About/>
+},
+   {
+  path: "emptydashboard",
+  element: <EmbtyDasheBoord/>
+},
+//  {
+//   path: "job-details/:id",
+//   element: <JobDetails/>
+// },
  {
-  path: "job-details/:id",
+  path: "job-details/:userId",
   element: <JobDetails/>
 },
 {
@@ -139,10 +176,7 @@ function App() {
   path: "find-freelancers-page",
   element: <FindFreelancersPage/>
 },
- {
-path: "Dashboard",
-element: <EmptyDashboard/>
-},
+ 
 //  {
 // path: "message",
 // element: <Message/>
@@ -152,7 +186,12 @@ element: <EmptyDashboard/>
      {
 path: "servicespage",
 element: <ServicesPage/>
+},  
+     {
+path: "verification",
+element: <Verification/>
 },          
+         
            {
 path: "clientproplist",
 element: <ClientPropList/>

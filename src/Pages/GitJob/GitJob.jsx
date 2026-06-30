@@ -1,221 +1,321 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useContext, useEffect } from 'react';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Star } from 'lucide-react';
+import { Send, Upload, X } from 'lucide-react';
 import { AuthContext } from '../../Components/Context/AuthContext';
 import { API_CONFIG } from '../../Config';
 
+const ALLOWED_FILE_TYPES = [
+  'application/pdf',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'image/jpeg',
+  'image/jpg',
+  'image/png',
+];
+
+const TIME_COMMITMENT_OPTIONS = ['Parttime', 'Fulltime', 'Flexible'];
+const EXPERIENCE_LEVEL_OPTIONS = ['Beginner', 'Intermediate', 'Expert'];
+
 export default function GitJob() {
-  const { id } = useParams();
+  const { jobId } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
   const { token } = useContext(AuthContext);
-  const [job, setJob] = useState(null);
-  const [loading, setLoading] = useState(true);
+
+  const passedState = location.state || {};
+  const [jobTitle, setJobTitle] = useState(passedState.jobTitle || '');
+  const [clientName, setClientName] = useState(passedState.clientName || '');
+  const [jobLoading, setJobLoading] = useState(!passedState.jobData);
+
+  const [formData, setFormData] = useState({
+    ProviderServiceId: passedState.jobData?.providerServiceId || passedState.jobData?.serviceId || '',
+    OfferAmount: '',
+    Description: '',
+    SimilarWorkExamplesURL: '',
+    Deadline: '',
+    Attachment: null,
+    TimeCommitment: passedState.jobData?.timeCommitment || '',
+    ExperienceLevel: passedState.jobData?.experienceLevel || '',
+  });
+
+  const [fileName, setFileName] = useState('');
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchJobDetails = async () => {
+    if (!token) {
+      navigate('/login');
+    }
+  }, [token, navigate]);
+
+  useEffect(() => {
+    const fetchJob = async () => {
+      if (passedState.jobData) {
+        setJobLoading(false);
+        return;
+      }
+
       try {
-        const { data } = await axios.get(`${API_CONFIG.baseURL}/api/Jobs/${id}`, {
-          headers: { 'X-API-Version': '' }
+        const { data } = await axios.get(`${API_CONFIG.baseURL}/api/Jobs/${jobId}`, {
+          headers: { 'X-API-Version': '' },
         });
 
         if (data.isSuccess && data.data) {
-          setJob(data.data);
+          const job = data.data;
+          setJobTitle(job.title || '');
+          setClientName(job.clientName || job.userName || job.postedByName || 'Client');
+          setFormData((prev) => ({
+            ...prev,
+            ProviderServiceId: job.providerServiceId || job.serviceId || '',
+            TimeCommitment: job.timeCommitment || prev.TimeCommitment,
+            ExperienceLevel: job.experienceLevel || prev.ExperienceLevel,
+          }));
         } else {
-          setError('لم يتم العثور على الوظيفة');
+          setError('Job not found');
         }
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching job:', error);
-        setError('فشل في تحميل تفاصيل الوظيفة');
-        setLoading(false);
+      } catch {
+        setError('Failed to load job details');
+      } finally {
+        setJobLoading(false);
       }
     };
 
-    if (id) {
-      fetchJobDetails();
+    if (jobId) {
+      fetchJob();
     }
-  }, [id]);
+  }, [jobId, passedState.jobData]);
 
-  const handleApplyNow = () => {
-    if (!token) {
-      alert('يجب تسجيل الدخول أولاً لإرسال عرض');
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      setError('File size must not exceed 5 MB');
       return;
     }
 
-    // Navigate to message page with job data
-    navigate(`/message/${id}`, {
+    if (!ALLOWED_FILE_TYPES.includes(file.type)) {
+      setError('Unsupported file type. Allowed: PDF, DOC, DOCX, JPG, JPEG, PNG');
+      return;
+    }
+
+    setError(null);
+    setFormData((prev) => ({ ...prev, Attachment: file }));
+    setFileName(file.name);
+  };
+
+  const removeFile = () => {
+    setFormData((prev) => ({ ...prev, Attachment: null }));
+    setFileName('');
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setError(null);
+
+    if (!formData.OfferAmount || !formData.Description || !formData.Deadline || !formData.TimeCommitment || !formData.ExperienceLevel) {
+      setError('Please fill in all required fields');
+      return;
+    }
+
+    const proposalPayload = {
+      ProviderServiceId: formData.ProviderServiceId || '',
+      OfferAmount: formData.OfferAmount,
+      Description: formData.Description,
+      SimilarWorkExamplesURL: formData.SimilarWorkExamplesURL || '',
+      Deadline: formData.Deadline,
+      TimeCommitment: formData.TimeCommitment,
+      ExperienceLevel: formData.ExperienceLevel,
+    };
+
+    sessionStorage.setItem(`proposal_${jobId}`, JSON.stringify(proposalPayload));
+
+    navigate(`/message/${jobId}`, {
       state: {
-        jobId: id,
-        jobTitle: job?.title,
-        clientName: job?.clientName || job?.userName || job?.postedByName || 'Client',
-        jobData: job
-      }
+        jobId,
+        jobTitle,
+        clientName,
+        proposalData: {
+          ...proposalPayload,
+          Attachment: formData.Attachment,
+        },
+      },
     });
   };
 
-  if (loading) {
+  if (jobLoading) {
     return (
       <div className="bg-gray-50 min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-purple-700"></div>
-          <p className="text-gray-600 mt-4">جاري تحميل تفاصيل الوظيفة...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="bg-gray-50 min-h-screen">
-        <div className="max-w-6xl mx-auto p-4 py-8">
-          <div className="bg-white rounded-lg shadow p-6 text-center">
-            <p className="text-xl text-red-600">{error}</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (!job) {
-    return (
-      <div className="bg-gray-50 min-h-screen">
-        <div className="max-w-6xl mx-auto p-4 py-8">
-          <div className="bg-white rounded-lg shadow p-6 text-center">
-            <p className="text-xl">لم يتم العثور على الوظيفة</p>
-          </div>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-purple-700" />
+          <p className="text-gray-600 mt-4">Loading job details...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen">
-      {/* Purple Header with Job Title */}
-      <div className="bg-gradient-to-r from-purple-800 to-purple-900 text-white py-12 pt-24">
-        <div className="max-w-6xl mx-auto px-6">
-          <h1 className="text-4xl font-bold text-center">"{job.title}"</h1>
+    <div className="bg-gray-50 min-h-screen pb-10">
+      <div className="bg-black text-white py-4 pt-24">
+        <div className="max-w-4xl mx-auto px-6">
+          <h1 className="text-lg font-semibold">
+            Apply To: {jobTitle || 'Job Title'}
+          </h1>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-6 py-10">
-        <div className="bg-white rounded-2xl shadow-xl p-8">
-          {/* Job Details Header */}
-          <div className="flex justify-between items-start mb-8">
-            <div>
-              <h2 className="text-3xl font-bold mb-3">JOB DETAILS</h2>
-              <p className="text-gray-600 text-lg">
-                Proposals: <span className="font-semibold">{job.offersCount || 0}</span>
-              </p>
-            </div>
-            <button
-              onClick={handleApplyNow}
-              className="bg-yellow-500 hover:bg-yellow-600 text-white px-8 py-3 rounded-lg font-bold text-lg shadow-md hover:shadow-lg transition-all"
-            >
-              Apply Now
-            </button>
-          </div>
+      <div className="max-w-4xl mx-auto px-6 mt-8">
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-8">
+          <h2 className="text-2xl font-bold mb-6">Send Proposal</h2>
 
-          {/* Stats Grid */}
-          <div className="grid grid-cols-3 gap-6 mb-10 pb-8 border-b-2 border-gray-200">
-            <div className="text-center">
-              <p className="font-bold text-xl mb-2">{job.experienceLevel}</p>
-              <p className="text-gray-600 text-base font-medium">Experience</p>
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
+              {error}
             </div>
-            <div className="text-center border-x-2 border-gray-200">
-              <p className="font-bold text-xl mb-2">{job.projectLength || 'N/A'}</p>
-              <p className="text-gray-600 text-base font-medium">Project Length</p>
-            </div>
-            <div className="text-center">
-              <p className="font-bold text-xl mb-2">
-                {job.budgetMin} - {job.budgetMax} EGP
-              </p>
-              <p className="text-gray-600 text-base font-medium">Budget</p>
-            </div>
-          </div>
+          )}
 
-          {/* Job Requirements */}
-          <div className="mb-8">
-            <h3 className="text-2xl font-bold mb-4">Job Requirements:</h3>
-            <p className="text-gray-700 leading-relaxed text-base">{job.description}</p>
-          </div>
+          <form onSubmit={handleSubmit}>
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label className="block mb-2 text-base font-semibold">
+                  Price* <span className="text-gray-500 font-normal">EGP</span>
+                </label>
+                <input
+                  type="number"
+                  name="OfferAmount"
+                  value={formData.OfferAmount}
+                  onChange={handleChange}
+                  required
+                  min="1"
+                  className="w-full border-b-2 border-gray-300 py-2 outline-none focus:border-purple-700 transition"
+                />
+              </div>
 
-          {/* Skills */}
-          <div className="mb-10">
-            <h3 className="text-2xl font-bold mb-4">The Ideal Candidate Skills:</h3>
-            <div className="flex flex-wrap gap-3">
-              {job.requiredSkills && job.requiredSkills.length > 0 ? (
-                job.requiredSkills.map((skill, idx) => (
-                  <span
-                    key={idx}
-                    className="bg-gray-200 text-gray-800 px-5 py-2.5 rounded-full text-base font-medium"
-                  >
-                    {skill}
-                  </span>
-                ))
-              ) : (
-                <span className="text-gray-500">No specific skills listed</span>
-              )}
-            </div>
-          </div>
-
-          {/* Details Table */}
-          <div className="space-y-0 border-t-2 border-gray-200">
-            <div className="flex justify-between items-center py-5 border-b border-gray-200">
-              <span className="font-bold text-lg">Category</span>
-              <span className="bg-purple-700 text-white px-8 py-2 rounded-md font-semibold text-base">
-                {job.categoryName}
-              </span>
-            </div>
-
-            <div className="flex justify-between items-center py-5 border-b border-gray-200">
-              <span className="font-bold text-lg">Time Commitment</span>
-              <span className="bg-purple-700 text-white px-8 py-2 rounded-md font-semibold text-base">
-                {job.timeCommitment}
-              </span>
-            </div>
-
-            <div className="flex justify-between items-center py-5 border-b border-gray-200">
-              <span className="font-bold text-lg">Posted At</span>
-              <span className="text-gray-800 font-semibold text-base">
-                {new Date(job.createdAt).toLocaleString('en-GB', {
-                  day: '2-digit',
-                  month: '2-digit',
-                  year: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit',
-                  hour12: true
-                }).toUpperCase()}
-              </span>
-            </div>
-
-            <div className="flex justify-between items-center py-5 border-b border-gray-200">
-              <span className="font-bold text-lg">Job Deadline</span>
-              <span className="text-gray-800 font-semibold text-base">
-                {new Date(job.deadline).toLocaleDateString('en-GB', {
-                  day: '2-digit',
-                  month: '2-digit',
-                  year: 'numeric'
-                })}
-              </span>
-            </div>
-
-            <div className="flex justify-between items-center py-5">
-              <span className="font-bold text-lg">Client's Review</span>
-              <div className="flex gap-1">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star
-                    key={star}
-                    size={24}
-                    className="text-gray-300"
-                    strokeWidth={2}
-                  />
-                ))}
+              <div>
+                <label className="block mb-2 text-base font-semibold">Deadline*</label>
+                <input
+                  type="date"
+                  name="Deadline"
+                  value={formData.Deadline}
+                  onChange={handleChange}
+                  required
+                  min={new Date().toISOString().split('T')[0]}
+                  className="w-full border-b-2 border-gray-300 py-2 outline-none focus:border-purple-700 transition"
+                />
               </div>
             </div>
-          </div>
+
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label className="block mb-2 text-base font-semibold">Time Commitment*</label>
+                <select
+                  name="TimeCommitment"
+                  value={formData.TimeCommitment}
+                  onChange={handleChange}
+                  required
+                  className="w-full border-b-2 border-gray-300 py-2 outline-none focus:border-purple-700 transition bg-transparent"
+                >
+                  <option value="">Select time commitment</option>
+                  {TIME_COMMITMENT_OPTIONS.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block mb-2 text-base font-semibold">Experience level*</label>
+                <select
+                  name="ExperienceLevel"
+                  value={formData.ExperienceLevel}
+                  onChange={handleChange}
+                  required
+                  className="w-full border-b-2 border-gray-300 py-2 outline-none focus:border-purple-700 transition bg-transparent"
+                >
+                  <option value="">Select experience level</option>
+                  {EXPERIENCE_LEVEL_OPTIONS.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <label className="block mb-2 text-base font-semibold">Proposal*</label>
+              <textarea
+                name="Description"
+                value={formData.Description}
+                onChange={handleChange}
+                placeholder="description"
+                required
+                rows="6"
+                className="w-full bg-gray-100 rounded-lg p-4 resize-none outline-none focus:ring-2 focus:ring-purple-700 transition"
+              />
+            </div>
+
+            <div className="mb-6">
+              <label className="block mb-2 text-base font-semibold">Attachment</label>
+
+              {!fileName ? (
+                <label className="border-2 border-dashed border-gray-300 rounded-lg p-8 flex flex-col items-center justify-center cursor-pointer hover:border-purple-500 transition">
+                  <Upload className="text-purple-600 mb-2" size={32} />
+                  <p className="text-gray-600 mb-1">
+                    Drop here or <span className="text-purple-700 font-semibold">Browse file</span>
+                  </p>
+                  <p className="text-sm text-gray-500">Supported formats: JPG, PNG (Max 10MB)</p>
+                  <input
+                    type="file"
+                    onChange={handleFileChange}
+                    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                    className="hidden"
+                  />
+                </label>
+              ) : (
+                <div className="border-2 border-gray-300 rounded-lg p-4 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Upload className="text-purple-600" size={20} />
+                    <span className="text-gray-700">{fileName}</span>
+                  </div>
+                  <button type="button" onClick={removeFile} className="text-red-600 hover:text-red-800">
+                    <X size={20} />
+                  </button>
+                </div>
+              )}
+
+              <p className="text-xs text-gray-600 mt-2">Up to 5 MB - PDF, DOc, DOCX, JPG, JPEG, PNG</p>
+              <p className="text-xs text-gray-600">
+                Allowed file types are: PDF, DOC, DOCXx, JPG, JPEG, PNG. Each file must not exceed 5 MB. You can upload up to 5 files.
+              </p>
+            </div>
+
+            <div className="mb-8">
+              <label className="block mb-2 text-base font-semibold">Similar work UEL</label>
+              <input
+                type="url"
+                name="SimilarWorkExamplesURL"
+                value={formData.SimilarWorkExamplesURL}
+                onChange={handleChange}
+                placeholder="https://example.com/portfolio"
+                className="w-full border-b-2 border-gray-300 py-2 outline-none focus:border-purple-700 transition"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-purple-800 text-white px-8 py-3 rounded-lg font-bold hover:opacity-90 transition"
+            >
+              <Send size={18} />
+              Send
+            </button>
+          </form>
         </div>
       </div>
     </div>

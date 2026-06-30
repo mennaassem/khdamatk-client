@@ -40,26 +40,26 @@ export default function JobDetails() {
   // Loading state
   if (loading) {
     return (
-      <div className="bg-gray-50 min-h-screen">
-        <div className="max-w-6xl mx-auto p-4 py-8">
-          <div className="bg-white rounded-lg shadow p-6 text-center">
-            <p className="text-xl">Loading job details...</p>
-          </div>
-        </div>
-      </div>
+      <div className="bg-gray-50 min-h-screen pt-24">
+  <div className="max-w-6xl mx-auto p-4 py-8">
+    <div className="bg-white rounded-lg shadow p-6 text-center">
+      <p className="text-xl">Loading job details...</p>
+    </div>
+  </div>
+</div>
     );
   }
 
   // Error state
   if (error) {
     return (
-      <div className="bg-gray-50 min-h-screen">
-        <div className="max-w-6xl mx-auto p-4 py-8">
-          <div className="bg-white rounded-lg shadow p-6 text-center">
-            <p className="text-xl text-red-600">{error}</p>
-          </div>
-        </div>
-      </div>
+     <div className="bg-gray-50 min-h-screen pt-24">
+  <div className="max-w-6xl mx-auto p-4 py-8">
+    <div className="bg-white rounded-lg shadow p-6 text-center">
+      <p className="text-xl text-red-600">{error}</p>
+    </div>
+  </div>
+</div>
     );
   }
 

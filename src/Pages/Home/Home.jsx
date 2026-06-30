@@ -50,20 +50,22 @@ transition-colors duration-300">
     <div className="flex items-center gap-3">
       
       <Link 
-        to={`/post-jop`} 
+        to={`/postjob`} 
         className="btn w-fit 
         bg-purple-700 hover:bg-purple-800
         dark:bg-purple-600 dark:hover:bg-purple-500
         text-white transition">
-        post jop
+        Post job
       </Link>
 
-      <button className="btn w-fit 
+      <Link 
+      to={`/git-job`}
+       className="btn w-fit 
       bg-amber-500 hover:bg-amber-600
       dark:bg-amber-400 dark:hover:bg-amber-300
       text-white transition">
-        Get A jop
-      </button>
+        Get A job
+      </Link>
 
     </div>
   </div>
