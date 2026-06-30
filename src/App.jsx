@@ -25,25 +25,20 @@ import AddService from './Pages/AddService/AddService';
 import AdminDashbord from './Pages/AdminDashbord/AdminDashbord';
 import ReportDetails from './Pages/ReportDetails/ReportDetails';
 import GitJob from './Pages/GitJob/GitJob';
+import SendProposal from './Pages/SendProposal/SendProposal';
 import Service from './Pages/Service/Service';
 import FindFreelancersPage from './Pages/FindFreelancersPage/FindFreelancersPage';
 import ProvidersProvider from './Components/Context/ProvidersContext';
 import EmptyDashboard from './../Pages/EmptyDashboard/EmptyDashboard';
 import ServicesPage from '../Pages/ServicesPage/ServicesPage';
 import ClientPropList from '../Pages/ClientPropList/ClientPropList';
-import MessagePage from '../Pages/MessagePage/MessagePage';
+import MessagePage from './Pages/MessagePage/MessagePage';
 import ServiceDetails from '../Pages/ServiceDetails/ServiceDetails';
 import SelectedFreeLancer from '../Pages/SelectedFreeLancer/SelectedFreeLancer';
  
  
  
 
- 
- 
- 
- 
- 
- 
 
 function App() {
  
@@ -117,8 +112,24 @@ function App() {
   element: <ReportDetails/>
 },
 {
-  path: "git-job",
+  path: "git-job/:id",
   element: <GitJob/>
+},
+{
+  path: "send-proposal/:jobId",
+  element: (
+ 
+      <SendProposal />
+
+  ),
+},
+{
+  path: "message/:jobId",
+  element: (
+   
+      <MessagePage />
+   
+  ),
 },
 {
   path: "service",
@@ -148,11 +159,7 @@ element: <ClientPropList/>
 },      
 
    {
-path: "messagepage",
-element: <MessagePage/>
-}, 
-   {
-path: "servicedetails",
+path: "servicedetails/:id?",
 element: <ServiceDetails/>
 },
 

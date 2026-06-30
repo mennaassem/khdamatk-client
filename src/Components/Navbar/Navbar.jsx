@@ -23,7 +23,7 @@ export default function Navbar() {
               <Link to="/" className='text-Purple-400 font-bold text-2xl'>KHADMA <span className='text-amber-500'> HUB</span></Link>
               <div className=' hidden lg:flex items-center gap-8'>
                 <button className=' flex items-center gap-2'>
-                  <Link to="/find-freelancers-page">Services</Link>
+                  <Link to="/servicespage">Services</Link>
                  
                 </button>
                 
@@ -131,7 +131,7 @@ export default function Navbar() {
       <div className='mt-4 border-b'>
         <ul className='divide-y divide-gray-200 text-sm'>
           <li>
-            <Link  onClick={closeMenue} to="/" className='block px-4 py-3 hover:bg-gray-100'>
+            <Link  onClick={closeMenue} to="/servicespage" className='block px-4 py-3 hover:bg-gray-100'>
               Services
             </Link>
           </li>

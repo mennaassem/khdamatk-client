@@ -1,376 +1,233 @@
- 
-import React, { useState } from "react";
-import {
-  Star,
-  MessageCircle,
-  ShoppingCart,
-  Heart,
-  Share2,
-  ChevronLeft,
-  ChevronRight,
-  CheckCircle,
-  Clock,
-  RotateCcw,
-  AlertCircle,
-} from "lucide-react";
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import { Star } from "lucide-react";
 
 export default function ServiceDetails() {
-  const [currentImageIdx, setCurrentImageIdx] = useState(0);
-  const [isWishlisted, setIsWishlisted] = useState(false);
-  const [selectedPackage, setSelectedPackage] = useState("basic");
+  const { id } = useParams();
+  const serviceId = id || 1; // Fallback to 1 if no id is provided in the route
 
-  const service = {
-    id: 1,
-    name: "تصميم شعار احترافي وفريد",
-    seller: "محمد أحمد",
-    sellerId: 1,
-    rating: 4.8,
-    reviews: 342,
-    completedOrders: 1250,
-    category: "تصميم جرافيك",
-    badge: "Top Seller",
-    profileImage:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
-    description:
-      "مرحبا، أنا مصمم جرافيك احترافي متخصص في تصميم الشعارات والهويات البصرية. لدي خبرة 8 سنوات في تصميم شعارات فريدة وغير مكررة.\n\nما أقدمه:\n✓ تصميم شعار احترافي وفريد\n✓ ملفات بصيغ متعددة (PNG, PDF, AI, PSD)\n✓ تعديلات غير محدودة حتى تصل للنتيجة المطلوبة\n✓ استشارة مجانية حول الألوان والخطوط\n✓ حقوق ملكية كاملة للعمل\n\nعملية العمل:\n1. استقبل فكرتك ومتطلباتك\n2. أقدم 3 مفاهيم مختلفة\n3. نختار الأفضل ونطورها\n4. تعديلات حتى تصل لرضاك الكامل",
-    images: [
-      "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=500&h=500&fit=crop",
-      "https://images.unsplash.com/photo-1561415261-38a76be7ce87?w=500&h=500&fit=crop",
-      "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=500&h=500&fit=crop",
-    ],
-    packages: [
-      {
-        id: "basic",
-        name: "الباقة الأساسية",
-        price: 500,
-        deliveryDays: 3,
-        revisions: 2,
-        description: "مفهوم واحد مع 2 تعديلات",
-        features: ["مفهوم واحد", "2 تعديل", "ملف PNG و PDF", "استشارة مجانية"],
-      },
-      {
-        id: "standard",
-        name: "الباقة المتوسطة",
-        price: 1000,
-        deliveryDays: 5,
-        revisions: 5,
-        description: "3 مفاهيم مع 5 تعديلات",
-        features: [
-          "3 مفاهيم",
-          "5 تعديلات",
-          "ملفات متعددة (PNG, PDF, AI, PSD)",
-          "أيقونة مصغرة",
-          "استشارة مجانية",
-        ],
-      },
-      {
-        id: "premium",
-        name: "الباقة المميزة",
-        price: 2000,
-        deliveryDays: 7,
-        revisions: 999,
-        description: "مفاهيم غير محدودة مع تعديلات غير محدودة",
-        features: [
-          "مفاهيم غير محدودة",
-          "تعديلات غير محدودة",
-          "جميع الملفات",
-          "Brand Guidelines كامل",
-          "استشارة موسعة",
-          "دعم ما بعد التسليم",
-        ],
-      },
-    ],
-  };
+  const [serviceData, setServiceData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const currentPackage = service.packages.find((p) => p.id === selectedPackage);
+  useEffect(() => {
+    const fetchServiceDetails = async () => {
+      const baseUrl = import.meta.env.VITE_BASE_URL || 'https://localhost:7210';
+      const token = localStorage.getItem("token");
 
-  const nextImage = () => {
-    setCurrentImageIdx((prev) => (prev + 1) % service.images.length);
-  };
+      const options = {
+        method: 'GET',
+        url: `${baseUrl}/api/Services/${serviceId}`,
+        headers: {
+          'X-API-Version': '',
+          'Authorization': token ? `Bearer ${token}` : '' // إرسال التوكن
+        }
+      };
 
-  const prevImage = () => {
-    setCurrentImageIdx(
-      (prev) => (prev - 1 + service.images.length) % service.images.length
-    );
+      try {
+        setLoading(true);
+        const { data } = await axios.request(options);
+        if (data.isSuccess) {
+          setServiceData(data.data);
+        } else {
+          setError(data.message || "Failed to load service details.");
+        }
+      } catch (err) {
+        console.error(err);
+        setError("An error occurred while fetching service details.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchServiceDetails();
+  }, [serviceId]);
+
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center text-xl font-semibold text-gray-600">Loading...</div>;
+  }
+
+  if (error || !serviceData) {
+    return <div className="min-h-screen flex items-center justify-center text-red-600 text-xl font-semibold">{error || "Service not found"}</div>;
+  }
+
+  // Helper to determine if image string already has data URI prefix
+  const getImageSrc = (imgStr) => {
+    if (!imgStr) return "https://via.placeholder.com/800x450?text=No+Image";
+    if (imgStr.startsWith("data:image")) return imgStr;
+    return `data:image/jpeg;base64,${imgStr}`;
   };
 
   return (
-    <div dir="rtl" className="bg-gray-100 min-h-screen mt-10 font-sans">
-   
-      {/* Main Content */}
+    <div className="bg-gray-50 min-h-screen font-sans text-left pt-20" dir="ltr">
       <div className="max-w-7xl mx-auto p-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column - Images & Details */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Image Gallery */}
-            <div className="bg-white rounded-xl shadow overflow-hidden">
-              <div className="relative bg-gray-200 aspect-square">
+        {/* Title and Contact Button */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4 sm:mb-0">
+            &ldquo;{serviceData.serviceTitle}&rdquo;
+          </h1>
+          <button className="bg-[#4a148c] text-white px-8 py-3 rounded-md font-semibold hover:bg-[#380b6b] transition">
+            Contact Me
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left Column */}
+          <div className="lg:col-span-2 space-y-8">
+            {/* Main Image */}
+            <div className="rounded-xl overflow-hidden shadow-sm bg-white border border-gray-200 aspect-[16/9]">
+              {serviceData.mainImage ? (
                 <img
-                  src={service.images[currentImageIdx]}
-                  alt="Service"
+                  src={getImageSrc(serviceData.mainImage)}
+                  alt={serviceData.serviceTitle}
                   className="w-full h-full object-cover"
+                  onError={(e) => { e.target.src = "https://via.placeholder.com/800x450?text=Error+Loading+Image" }}
                 />
-
-                {/* Navigation Buttons */}
-                <button
-                  onClick={prevImage}
-                  className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white p-2 rounded-full shadow transition"
-                >
-                  <ChevronLeft size={24} />
-                </button>
-                <button
-                  onClick={nextImage}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white p-2 rounded-full shadow transition"
-                >
-                  <ChevronRight size={24} />
-                </button>
-
-                {/* Image Counter */}
-                <div className="absolute bottom-4 left-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
-                  {currentImageIdx + 1} / {service.images.length}
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-500">
+                  No Image Available
                 </div>
-              </div>
-
-              {/* Thumbnails */}
-              <div className="flex gap-2 p-4 bg-gray-50">
-                {service.images.map((img, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setCurrentImageIdx(idx)}
-                    className={`w-16 h-16 rounded-lg overflow-hidden border-2 transition ${
-                      idx === currentImageIdx
-                        ? "border-purple-700"
-                        : "border-gray-300"
-                    }`}
-                  >
-                    <img src={img} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
-                  </button>
-                ))}
-              </div>
+              )}
             </div>
 
-            {/* Service Info */}
-            <div className="bg-white rounded-xl shadow p-6">
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h1 className="text-3xl font-bold text-gray-800 mb-2">
-                    {service.name}
-                  </h1>
-                  <div className="flex items-center gap-4">
-                    <span className="inline-block bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-semibold">
-                      {service.badge}
-                    </span>
-                    <span className="text-sm text-gray-600">
-                      الفئة: {service.category}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setIsWishlisted(!isWishlisted)}
-                    className={`p-3 rounded-lg transition ${
-                      isWishlisted
-                        ? "bg-red-100 text-red-600"
-                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                    }`}
-                  >
-                    <Heart size={20} fill={isWishlisted ? "currentColor" : "none"} />
-                  </button>
-                  <button className="p-3 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition">
-                    <Share2 size={20} />
-                  </button>
-                </div>
-              </div>
-
-              <hr className="my-4" />
-
-              {/* Seller Info */}
-              <div className="flex items-center gap-4 pb-6 border-b">
-                <img
-                  src={service.profileImage}
-                  alt={service.seller}
-                  className="w-16 h-16 rounded-full object-cover"
-                />
-                <div className="flex-1">
-                  <h3 className="text-lg font-bold text-gray-800 mb-1">
-                    {service.seller}
-                  </h3>
-                  <div className="flex gap-4 text-sm text-gray-600">
-                    <span className="flex items-center gap-1">
-                      <Star size={14} className="text-yellow-500" fill="currentColor" />
-                      {service.rating} ({service.reviews} تقييم)
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <CheckCircle size={14} className="text-green-500" />
-                      {service.completedOrders} طلب مكتمل
-                    </span>
-                  </div>
-                </div>
-                <button className="px-6 py-2 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition font-semibold">
-                  متابعة
-                </button>
-              </div>
-
-              {/* Description */}
-              <div className="mt-6">
-                <h3 className="text-xl font-bold text-gray-800 mb-3">
-                  حول هذه الخدمة
-                </h3>
-                <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
-                  {service.description}
-                </p>
-              </div>
+            {/* Service Details */}
+            <div>
+              <h2 className="text-xl font-bold text-gray-800 mb-2 border-b-2 border-gray-300 pb-2 inline-block">
+                Service details
+              </h2>
+              <p className="text-gray-700 leading-relaxed mt-2 whitespace-pre-wrap">
+                {serviceData.detailDescription}
+              </p>
             </div>
 
-            {/* Reviews Preview */}
-            <div className="bg-white rounded-xl shadow p-6">
-              <h3 className="text-xl font-bold text-gray-800 mb-4">
-                تقييمات العملاء
-              </h3>
+            {/* Requirements / Details */}
+            <div>
+              <h2 className="text-xl font-bold text-gray-800 mb-2 border-b-2 border-gray-300 pb-2 inline-block">
+                Requirements / Details
+              </h2>
+              <p className="text-gray-700 leading-relaxed mt-2 whitespace-pre-wrap">
+                {serviceData.shortDescription}
+              </p>
+            </div>
 
-              <div className="space-y-4">
-                {[1, 2, 3].map((review) => (
-                  <div key={review} className="pb-4 border-b last:border-b-0">
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-400 to-purple-400" />
-                        <div>
-                          <p className="font-semibold text-gray-800">
-                            عميل {review}
-                          </p>
-                          <p className="text-xs text-gray-500">منذ أسبوع</p>
-                        </div>
-                      </div>
-                      <div className="flex gap-1">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <Star
-                            key={star}
-                            size={14}
-                            className="text-yellow-500"
-                            fill="currentColor"
-                          />
-                        ))}
-                      </div>
+            {/* Business Exhibition */}
+            {Array.isArray(serviceData.serviceImages) && serviceData.serviceImages.length > 0 && (
+              <div>
+                <h2 className="text-xl font-bold text-gray-800 mb-2 border-b-2 border-gray-300 pb-2 inline-block">
+                  Business Exhibition
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                  {serviceData.serviceImages.map((img, idx) => (
+                    <div key={idx} className="rounded-xl overflow-hidden shadow-sm border border-gray-200 aspect-video">
+                      <img
+                        src={getImageSrc(img)}
+                        alt={`Exhibition ${idx + 1}`}
+                        className="w-full h-full object-cover"
+                        onError={(e) => { e.target.src = "https://via.placeholder.com/400x225?text=Error" }}
+                      />
                     </div>
-                    <p className="text-sm text-gray-700">
-                      خدمة ممتازة جداً، العمل احترافي وسريع، سأتعامل معه مجددًا
-                    </p>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
-          {/* Right Column - Packages & CTA */}
+          {/* Right Column */}
           <div className="space-y-6">
-            {/* Package Selection */}
-            <div className="bg-white rounded-xl shadow p-6">
-              <h3 className="text-xl font-bold text-gray-800 mb-4">
-                اختر الباقة المناسبة
+            {/* Buying the service */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <h3 className="text-lg font-bold text-gray-800 mb-4 border-b-2 border-gray-300 pb-2 inline-block">
+                Buying the service
               </h3>
 
-              <div className="space-y-3">
-                {service.packages.map((pkg) => (
-                  <button
-                    key={pkg.id}
-                    onClick={() => setSelectedPackage(pkg.id)}
-                    className={`w-full p-4 rounded-lg border-2 text-right transition ${
-                      selectedPackage === pkg.id
-                        ? "border-purple-700 bg-purple-50"
-                        : "border-gray-200 bg-gray-50 hover:border-gray-300"
-                    }`}
-                  >
-                    <div className="flex justify-between items-start mb-2">
-                      <div>
-                        <p className="font-bold text-gray-800">{pkg.name}</p>
-                        <p className="text-xs text-gray-600">{pkg.description}</p>
-                      </div>
-                      <p className="text-lg font-bold text-purple-700">
-                        {pkg.price} EGP
-                      </p>
-                    </div>
-                  </button>
-                ))}
+              <div className="flex justify-between items-center mt-2 mb-6">
+                <span className="text-gray-700 font-medium">Price</span>
+                <span className="text-gray-900 font-bold">{serviceData.price} EGP</span>
               </div>
-            </div>
 
-            {/* Selected Package Details */}
-            {currentPackage && (
-              <div className="bg-white rounded-xl shadow p-6 sticky top-24">
-                <h3 className="text-xl font-bold text-gray-800 mb-4">
-                  {currentPackage.name}
-                </h3>
-
-                <div className="space-y-3 mb-6">
-                  <div className="p-3 bg-purple-50 rounded-lg">
-                    <p className="text-xs text-gray-600 mb-1">السعر</p>
-                    <p className="text-2xl font-bold text-purple-700">
-                      {currentPackage.price} EGP
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="p-3 bg-gray-50 rounded-lg text-center">
-                      <Clock size={16} className="text-gray-600 mx-auto mb-1" />
-                      <p className="text-xs text-gray-600">التسليم</p>
-                      <p className="font-bold text-gray-800">
-                        {currentPackage.deliveryDays} أيام
-                      </p>
-                    </div>
-                    <div className="p-3 bg-gray-50 rounded-lg text-center">
-                      <RotateCcw size={16} className="text-gray-600 mx-auto mb-1" />
-                      <p className="text-xs text-gray-600">تعديلات</p>
-                      <p className="font-bold text-gray-800">
-                        {currentPackage.revisions === 999
-                          ? "∞"
-                          : currentPackage.revisions}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mb-6">
-                  <p className="text-sm font-semibold text-gray-800 mb-3">
-                    تتضمن الباقة:
-                  </p>
-                  <ul className="space-y-2">
-                    {currentPackage.features.map((feature, idx) => (
-                      <li
-                        key={idx}
-                        className="flex gap-2 text-sm text-gray-700 items-start"
-                      >
-                        <CheckCircle
-                          size={14}
-                          className="text-green-500 flex-shrink-0 mt-0.5"
-                        />
-                        <span>{feature}</span>
+              {Array.isArray(serviceData.concepts) && serviceData.concepts.length > 0 && (
+                <div>
+                  <h4 className="text-sm font-bold text-gray-800 mb-3 border-b border-gray-200 pb-1 inline-block">
+                    Optional Extras
+                  </h4>
+                  <ul className="space-y-2 mt-2">
+                    {serviceData.concepts.map((concept, idx) => (
+                      <li key={idx} className="text-gray-600 text-sm flex items-center">
+                        <span className="w-1.5 h-1.5 bg-gray-400 rounded-full mr-2"></span>
+                        {concept}
                       </li>
                     ))}
                   </ul>
                 </div>
+              )}
+            </div>
 
-                <div className="space-y-3">
-                  <button className="w-full py-3 bg-gradient-to-r from-purple-700 to-purple-600 text-white rounded-lg hover:shadow-lg transition font-semibold flex items-center justify-center gap-2">
-                    <ShoppingCart size={18} /> اطلب الآن
-                  </button>
+            {/* Service card */}
+            {serviceData.providerServiceInfo && (
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <h3 className="text-lg font-bold text-gray-800 mb-6 border-b-2 border-gray-300 pb-2 inline-block">
+                  Service card
+                </h3>
 
-                  <button className="w-full py-3 rounded-lg font-semibold text-purple-700 bg-purple-50 hover:bg-purple-100 transition flex items-center justify-center gap-2">
-                    <MessageCircle size={18} /> تواصل قبل الطلب
-                  </button>
+                <div className="flex items-center gap-4 mt-2 mb-6">
+                  <div className="w-16 h-16 rounded-full overflow-hidden border border-gray-200 bg-gray-100 flex-shrink-0">
+                    {serviceData.providerServiceInfo.image ? (
+                      <img
+                        src={getImageSrc(serviceData.providerServiceInfo.image)}
+                        alt={serviceData.providerServiceInfo.name}
+                        className="w-full h-full object-cover"
+                        onError={(e) => { e.target.src = "https://via.placeholder.com/64?text=U" }}
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-400">U</div>
+                    )}
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-gray-900 text-lg">
+                      {serviceData.providerServiceInfo.name}
+                    </h4>
+                    <p className="text-gray-500 text-sm">
+                      {serviceData.providerServiceInfo.jobTitle}
+                    </p>
+                    <div className="flex items-center mt-1">
+                      <div className="flex text-yellow-400">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            size={12}
+                            fill={i < Math.round(serviceData.providerServiceInfo.averageRating || 0) ? "currentColor" : "none"}
+                            className={i < Math.round(serviceData.providerServiceInfo.averageRating || 0) ? "" : "text-gray-300"}
+                          />
+                        ))}
+                      </div>
+                      <span className="text-xs text-gray-600 ml-2">
+                        {serviceData.providerServiceInfo.averageRating} ({serviceData.ordersCount} reviews)
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center border-b border-gray-100 pb-2">
+                    <span className="text-gray-700 text-sm">Average response speed</span>
+                    <span className="text-gray-900 text-sm font-medium">{serviceData.providerServiceInfo.averageResponseTime} hour</span>
+                  </div>
+                  <div className="flex justify-between items-center border-b border-gray-100 pb-2">
+                    <span className="text-gray-700 text-sm">Orders in progress</span>
+                    <span className="text-gray-900 text-sm font-medium">{serviceData.providerServiceInfo.totalOrdersInProgress}</span>
+                  </div>
+                  <div className="flex justify-between items-center border-b border-gray-100 pb-2">
+                    <span className="text-gray-700 text-sm">Number of requests</span>
+                    <span className="text-gray-900 text-sm font-medium">{serviceData.ordersCount}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-700 text-sm">Delivery time</span>
+                    <span className="text-gray-900 text-sm font-medium">{serviceData.deliveryTimeInDays} Days</span>
+                  </div>
                 </div>
               </div>
             )}
-
-            {/* Safety Badge */}
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-              <div className="flex gap-3">
-                <AlertCircle size={20} className="text-green-600 flex-shrink-0" />
-                <div className="text-sm text-green-700">
-                  <p className="font-semibold mb-1">✓ محمي بضمان Khadma Hub</p>
-                  <p>أموالك آمنة وسيتم الدفع عند استقبال العمل</p>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

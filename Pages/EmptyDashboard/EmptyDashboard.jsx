@@ -19,6 +19,7 @@ export default function EmptyDashboard() {
     // حالة للتحكم في التبويب النشط
     const [activeTab, setActiveTab] = useState('waiting');
 
+
     // مصفوفة تحتوي على بيانات التبويبات لتسهيل العرض
     const tabs = [
         { id: 'processing', label: 'In Processing Proposals', icon: faSyncAlt },
@@ -27,6 +28,8 @@ export default function EmptyDashboard() {
         { id: 'waiting', label: 'Waiting list', icon: faHourglassHalf },
     ];
 
+
+    
     return (
         <div className="min-h-screen flex flex-col bg-[#f4f6f8] font-sans">
             

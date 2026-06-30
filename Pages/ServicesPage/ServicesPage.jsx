@@ -1,192 +1,125 @@
- 
- import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import {
-  Code2,
+  Code,
   Palette,
   Video,
   Languages,
-  FileText,
-  Zap,
-  TrendingUp,
+  PenTool,
+  Share2,
+  Megaphone,
   DollarSign,
-  BookOpen,
+  TrendingUp,
   PieChart,
   Briefcase,
-  Users,
+  HardHat
 } from "lucide-react";
 
+const getCategoryDetails = (name) => {
+  const n = name?.toLowerCase() || '';
+  if (n.includes('develop') || n.includes('web')) return { icon: Code, desc: "Build websites, mobile apps, software solutions, and smart systems for modern businesses." };
+  if (n.includes('design') || n.includes('ui')) return { icon: Palette, desc: "Create logos, branding, UI/UX designs, and visuals that attract customers professionally." };
+  if (n.includes('media') || n.includes('video')) return { icon: Video, desc: "Media Production is creating videos, photos, and ads to promote ideas or brands in a professional way." };
+  if (n.includes('translat')) return { icon: Languages, desc: "Convert content accurately between languages while keeping meaning, style, and context." };
+  if (n.includes('writ')) return { icon: PenTool, desc: "Create articles, blogs, copywriting, and content that engages audiences and builds trust." };
+  if (n.includes('digital')) return { icon: Share2, desc: "Promote brands online using SEO, social media, ads, and audience targeting strategies." };
+  if (n.includes('marketing')) return { icon: Megaphone, desc: "Plan campaigns, understand customers, and create strategies that increase sales and visibility." };
+  if (n.includes('sale')) return { icon: DollarSign, desc: "Improve customer relationships, close deals, and generate consistent business growth successfully." };
+  if (n.includes('train')) return { icon: TrendingUp, desc: "Provide learning programs, workshops, and coaching to improve skills and performance levels." };
+  if (n.includes('financ')) return { icon: PieChart, desc: "Manage budgets, accounting, financial planning, and reports for strong business stability." };
+  if (n.includes('business')) return { icon: Briefcase, desc: "Develop ideas, operations, management strategies, and solutions for successful company growth." };
+  if (n.includes('engineer')) return { icon: HardHat, desc: "Design technical solutions, projects, systems, and innovations for industries and infrastructure." };
+
+  // Default
+  return { icon: Briefcase, desc: "Professional services to help you achieve your goals and grow your business effectively." };
+};
+
 export default function ServicesPage() {
-  const services = [
-    {
-      id: 1,
-      name: "DEVELOPERS",
-      description: "Web & Mobile Development",
-      icon: Code2,
-      color: "from-blue-400 to-blue-600",
-      details: "عمل تطبيقات ويب و موبايل احترافية",
-    },
-    {
-      id: 2,
-      name: "DESIGNERS",
-      description: "UI/UX & Graphic Design",
-      icon: Palette,
-      color: "from-purple-400 to-purple-600",
-      details: "تصميم واجهات احترافية وهويات بصرية",
-    },
-    {
-      id: 3,
-      name: "MEDIA PRODUCTION",
-      description: "Video & Photo Production",
-      icon: Video,
-      color: "from-red-400 to-red-600",
-      details: "إنتاج محتوى بصري عالي الجودة",
-    },
-    {
-      id: 4,
-      name: "TRANSLATION",
-      description: "Professional Translation Services",
-      icon: Languages,
-      color: "from-green-400 to-green-600",
-      details: "ترجمة احترافية لعدة لغات",
-    },
-    {
-      id: 5,
-      name: "WRITING",
-      description: "Content & Copywriting",
-      icon: FileText,
-      color: "from-yellow-400 to-yellow-600",
-      details: "كتابة محتوى احترافي وجذاب",
-    },
-    {
-      id: 6,
-      name: "DIGITAL MARKETING",
-      description: "SEO, SEM & Social Media",
-      icon: Zap,
-      color: "from-pink-400 to-pink-600",
-      details: "تسويق رقمي وإدارة وسائل التواصل",
-    },
-    {
-      id: 7,
-      name: "MARKETING",
-      description: "Brand & Marketing Strategy",
-      icon: TrendingUp,
-      color: "from-indigo-400 to-indigo-600",
-      details: "استراتيجيات تسويقية متكاملة",
-    },
-    {
-      id: 8,
-      name: "SALES",
-      description: "Sales Consulting & Strategy",
-      icon: DollarSign,
-      color: "from-orange-400 to-orange-600",
-      details: "استشارات مبيعات واستراتيجيات نمو",
-    },
-    {
-      id: 9,
-      name: "TRAINING",
-      description: "Professional Training & Courses",
-      icon: BookOpen,
-      color: "from-cyan-400 to-cyan-600",
-      details: "تدريب احترافي وورش عمل",
-    },
-    {
-      id: 10,
-      name: "FINANCE",
-      description: "Financial Consulting",
-      icon: PieChart,
-      color: "from-emerald-400 to-emerald-600",
-      details: "استشارات مالية واستثمارية",
-    },
-    {
-      id: 11,
-      name: "BUSINESS",
-      description: "Business Consulting",
-      icon: Briefcase,
-      color: "from-violet-400 to-violet-600",
-      details: "استشارات الأعمال والإدارة",
-    },
-    {
-      id: 12,
-      name: "ENGINEERS",
-      description: "Engineering & Technical Services",
-      icon: Users,
-      color: "from-lime-400 to-lime-600",
-      details: "خدمات هندسية وتقنية متخصصة",
-    },
-  ];
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const { data } = await axios.get('https://localhost:7210/api/Home', {
+          headers: { 'X-API-Version': '' }
+        });
+
+        if (data.isSuccess && data.data && data.data.servicesCategories) {
+          setCategories(data.data.servicesCategories);
+        } else {
+          const fallbackData = data?.data || data || [];
+          if (Array.isArray(fallbackData)) {
+            setCategories(fallbackData);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching categories', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  const handleCategoryClick = (categoryName) => {
+    navigate(`/service?category=${encodeURIComponent(categoryName)}`);
+  };
 
   return (
-    <div dir="rtl" className="bg-gray-100 mt-10 min-h-screen font-sans">
-      
-      {/* Hero Section */}
-      <div className="bg-gradient-to-b from-purple-50 to-white py-12">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">
-            خدماتنا
-          </h1>
-          <p className="text-gray-600 text-lg mb-2">
-            اختر من بين مجموعة واسعة من الخدمات المتخصصة
-          </p>
-          <p className="text-gray-500">
-            نوفر خدمات احترافية في مختلف المجالات لتحقيق أهدافك
-          </p>
-        </div>
+    <div className="bg-white min-h-screen pt-28 pb-20 font-sans text-gray-900">
+
+      {/* Header Section */}
+      <div className="max-w-4xl mx-auto px-4 text-center mb-16">
+        <h1 className="text-4xl font-bold text-purple-800 mb-4 tracking-wide">Our Services</h1>
+        <p className="text-gray-600 text-sm md:text-base leading-relaxed max-w-2xl mx-auto">
+          Construction sector is considered to be one of the main sources of national's economy and also country development.
+        </p>
       </div>
 
       {/* Services Grid */}
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {services.map((service) => {
-            const Icon = service.icon;
-            return (
-              <div
-                key={service.id}
-                className="bg-white rounded-xl shadow hover:shadow-lg transition cursor-pointer group"
-              >
-                {/* Icon Background */}
+      <div className="max-w-7xl mx-auto px-6">
+        {loading ? (
+          <div className="text-center text-purple-600 font-semibold py-20">Loading services...</div>
+        ) : categories.length === 0 ? (
+          <div className="text-center text-gray-500 py-20">No categories found.</div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-16">
+            {categories.map((category, idx) => {
+              const catName = category.name || category.categoryName || category;
+              const catId = category.id || category.categoryId || idx;
+              const details = getCategoryDetails(catName);
+              const Icon = details.icon;
+
+              return (
                 <div
-                  className={`bg-gradient-to-br ${service.color} p-8 flex items-center justify-center group-hover:scale-105 transition`}
+                  key={catId}
+                  onClick={() => handleCategoryClick(catName)}
+                  className="group cursor-pointer flex flex-col items-center text-center p-4 rounded-xl hover:bg-purple-50 transition-colors duration-300"
                 >
-                  <Icon size={48} className="text-white" />
-                </div>
+                  {/* Icon */}
+                  <div className="mb-6 flex items-center justify-center">
+                    <Icon strokeWidth={1.5} className="text-purple-800 w-12 h-12 group-hover:scale-110 transition-transform duration-300" />
+                  </div>
 
-                {/* Content */}
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">
-                    {service.name}
+                  {/* Title */}
+                  <h3 className="text-lg font-bold text-gray-900 mb-3 uppercase tracking-wider">
+                    {catName}
                   </h3>
-                  <p className="text-sm text-gray-600 mb-3">
-                    {service.description}
+
+                  {/* Description */}
+                  <p className="text-xs text-gray-500 leading-relaxed max-w-[250px]">
+                    {details.desc}
                   </p>
-                  <p className="text-sm text-gray-700 leading-relaxed mb-4">
-                    {service.details}
-                  </p>
-                  <button className="w-full bg-purple-700 text-white py-2 rounded-lg hover:bg-purple-800 transition font-semibold text-sm">
-                    استكشف الخدمة
-                  </button>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )}
       </div>
 
-      {/* CTA Section */}
-      <div className="bg-purple-700 py-12 my-12">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            هل تحتاج خدمة محددة؟
-          </h2>
-          <p className="text-purple-100 mb-6">
-            تواصل معنا الآن وسنساعدك في إيجاد الفريق المناسب لمشروعك
-          </p>
-          <button className="bg-white text-purple-700 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
-            ابدأ الآن
-          </button>
-        </div>
-      </div>
-
-     
     </div>
   );
 }

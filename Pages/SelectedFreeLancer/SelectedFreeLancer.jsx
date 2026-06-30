@@ -28,7 +28,7 @@ export default function SelectedFreeLancer() {
     title: "مصمم UI/UX احترافي",
     location: "القاهرة، مصر",
     rating: 4.9,
-    reviews: 245,
+    reviewsCount: 245,
     completedProjects: 87,
     responseTime: "1 ساعة",
     joinDate: "2020-05-15",
@@ -165,7 +165,7 @@ export default function SelectedFreeLancer() {
                   </div>
                   <span className="font-semibold">{freelancer.rating}</span>
                   <span className="text-gray-600">
-                    ({freelancer.reviews} تقييم)
+                    ({freelancer.reviewsCount} تقييم)
                   </span>
                 </div>
                 <div className="h-6 w-px bg-gray-300" />
